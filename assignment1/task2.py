@@ -15,6 +15,7 @@ def calculate_accuracy(X: np.ndarray, targets: np.ndarray, model: BinaryModel) -
         Accuracy (float)
     """
     # Task 2c
+    # Test mark
     accuracy = 0.0
     return accuracy
 
