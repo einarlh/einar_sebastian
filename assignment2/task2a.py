@@ -4,14 +4,16 @@ import typing
 np.random.seed(1)
 
 
- 
 
-def pre_process_images(X: np.ndarray, x_mean, x_std):
+def pre_process_images(X: np.ndarray, x_mean = 128, x_std = 50):
+    
     """
     Args:
         X: images of shape [batch size, 784] in the range (0, 255)
     Returns:
         X: images of shape [batch size, 785]
+        
+    Default values to allow the instructor tests to run
     """
     assert X.shape[1] == 784,\
         f"X.shape[1]: {X.shape[1]}, should be 784"
@@ -60,9 +62,8 @@ class SoftmaxModel:
             w = np.zeros(w_shape)
             self.ws.append(w)
             prev = size
-        self.grads = [0 for i in range(len(self.ws))]
-        print(self.ws[0].shape)
-
+        self.grads = [np.zeros_like(self.ws[i]) for i in range(len(self.ws))]    
+    
     def forward(self, X: np.ndarray) -> np.ndarray:
         """
         Args:
@@ -70,11 +71,42 @@ class SoftmaxModel:
         Returns:
             y: output of model with shape [batch size, num_outputs]
         """
-        prev = X 
-        for i in range(len(self.ws)):
-            z = prev.dot(self.ws[i])
-            prev = 1 / (1 + np.exp(-z))
-        return prev
+        activation = X
+        for i in range(len(self.ws) - 1):
+            z = activation.dot(self.ws[i])
+            activation = self.sigmoid(z)
+
+        z = np.exp(activation.dot(self.ws[-1]))
+        z_sum = z.sum(axis = 1, keepdims = True)
+        return z/z_sum
+        
+
+    def sigmoid(self, z):
+        """The sigmoid function."""
+        return 1.0/(1.0+np.exp(-z))
+    
+    def sigmoid_prime(self, z):
+        """Derivative of the sigmoid function."""
+        return self.sigmoid(z)*(1-self.sigmoid(z))
+
+    def compute_a_z(self, X: np.ndarray) -> np.ndarray:
+        activation = X
+        activations = [X]
+        zs = []
+        for i in range(len(self.ws) - 1):
+            z = activation.dot(self.ws[i])
+            zs.append(z)
+            activation = self.sigmoid(z)
+            activations.append(activation)
+
+        z = np.exp(activation.dot(self.ws[-1]))
+        zs.append(z)
+        z_sum = z.sum(axis = 1, keepdims = True)
+        activation = z/z_sum
+        activations.append(activation)
+        
+        return activations, zs
+        
 
     def backward(self, X: np.ndarray, outputs: np.ndarray,
                  targets: np.ndarray) -> None:
@@ -86,13 +118,39 @@ class SoftmaxModel:
         """
         assert targets.shape == outputs.shape,\
             f"Output shape: {outputs.shape}, targets: {targets.shape}"
+
         # A list of gradients.
         # For example, self.grads[0] will be the gradient for the first hidden layer
-        self.grads = []
+        #self.grads = np.zeros_like(self.ws)
+        activations, zs = self.compute_a_z(X)
+        
+        delta = -1 * (outputs - activations[-1]) * self.sigmoid_prime(zs[-1])
+        print("delta first" + str(delta.shape))
+        print("outputs " + str(outputs.shape))
+        print("self.sigmoid_prime(zs[-1]) " + str(self.sigmoid_prime(zs[-1]).shape))
+        print("self.grads[-1] " + str(self.grads[-1].shape))
+        print("activations[-2] " + str(activations[-2].shape))
+        print("np.dot(delta.transpose(), activations[-2])" + str((np.dot(delta.transpose(), activations[-2])).shape))
+        print()
+        self.grads[-1] = np.dot(delta.transpose(), activations[-2]).T
+        for l in range(1, len(self.neurons_per_layer)):
+            z = zs[-l-1]
+            sp = self.sigmoid_prime(z)
+            print("delta_prev " + str(delta.shape))
+            # should be: delta = np.dot(self.ws[-l], delta.transpose()) * sp
+            delta = np.dot(self.ws[-l], delta.transpose()) @ sp
+            print("self.ws[-l] "+str(self.ws[-l].shape))
+            print("sp "+str(self.ws[-l].shape))
+            print("delta_after " + str(delta.shape))
+            print("activations[-l-2] " + str(activations[-l-2].shape))
+            print("self.grads[-l-1] " + str(self.grads[-l-1].shape))
+            self.grads[-l-1] = np.dot(delta, activations[-l-2].transpose())
 
+#
         for grad, w in zip(self.grads, self.ws):
             assert grad.shape == w.shape,\
                 f"Expected the same shape. Grad shape: {grad.shape}, w: {w.shape}."
+           
 
     def zero_grad(self) -> None:
         self.grads = [None for i in range(len(self.ws))]
@@ -155,7 +213,6 @@ if __name__ == "__main__":
     X_train, Y_train, *_ = utils.load_full_mnist(0.1)
     x_train_mean = np.mean(X_train)
     x_train_std = np.std(X_train)
-    print(X_train.shape)
     X_train = pre_process_images(X_train, x_train_mean, x_train_std)
     Y_train = one_hot_encode(Y_train, 10)
     assert X_train.shape[1] == 785,\
