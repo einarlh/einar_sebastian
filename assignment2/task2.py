@@ -16,7 +16,11 @@ def calculate_accuracy(X: np.ndarray, targets: np.ndarray,
     Returns:
         Accuracy (float)
     """
-    accuracy = 0
+    targets_indices = np.argmax(targets, axis = 1)
+    outputs_indices = np.argmax(model.forward(X), axis = 1)
+    result = np.equal(targets_indices, outputs_indices)
+    result.size
+    accuracy = (result.sum()) / result.size
     return accuracy
 
 
@@ -50,11 +54,17 @@ def train(
 
             # Track train / validation loss / accuracy
             # every time we progress 20% through the dataset
+
+            outputs = model.forward(X_batch)
+            model.backward(X_batch, outputs, Y_batch)
+            for i in range(len(model.ws)):
+                model.ws[i] = model.ws[i] - learning_rate * model.grads[i]
+
             if (global_step % num_steps_per_val) == 0:
-                _val_loss = 0
+                _val_loss = cross_entropy_loss(Y_val, model.forward(X_val))
                 val_loss[global_step] = _val_loss
 
-                _train_loss = 0
+                _train_loss = cross_entropy_loss(Y_batch, outputs)
                 train_loss[global_step] = _train_loss
 
                 train_accuracy[global_step] = calculate_accuracy(
@@ -72,8 +82,18 @@ if __name__ == "__main__":
     X_train, Y_train, X_val, Y_val, X_test, Y_test = utils.load_full_mnist(
         validation_percentage)
 
+    #preprocessing of targets and images
+    x_train_mean = np.mean(X_train)
+    x_train_std = np.std(X_train)
+    X_train = pre_process_images(X_train, x_train_mean, x_train_std)
+    X_test = pre_process_images(X_test, x_train_mean, x_train_std)
+    X_val = pre_process_images(X_val, x_train_mean, x_train_std)
+    Y_train = one_hot_encode(Y_train, 10)
+    Y_test = one_hot_encode(Y_test, 10)
+    Y_val = one_hot_encode(Y_val, 10)
+
     # Hyperparameters
-    num_epochs = 20
+    num_epochs = 50
     learning_rate = .1
     batch_size = 32
     neurons_per_layer = [64, 10]
@@ -116,7 +136,7 @@ if __name__ == "__main__":
     # Plot loss
     plt.figure(figsize=(20, 8))
     plt.subplot(1, 2, 1)
-    plt.ylim([0.1, .5])
+    #plt.ylim([0.1, .5])
     utils.plot_loss(train_loss, "Training Loss")
     utils.plot_loss(val_loss, "Validation Loss")
     plt.xlabel("Number of gradient steps")
@@ -124,7 +144,7 @@ if __name__ == "__main__":
     plt.legend()
     plt.subplot(1, 2, 2)
     # Plot accuracy
-    plt.ylim([0.9, 1.0])
+    #plt.ylim([0.9, 1.0])
     utils.plot_loss(train_accuracy, "Training Accuracy")
     utils.plot_loss(val_accuracy, "Validation Accuracy")
     plt.legend()

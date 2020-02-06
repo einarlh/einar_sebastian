@@ -34,7 +34,7 @@ def cross_entropy_loss(targets: np.ndarray, outputs: np.ndarray):
     assert targets.shape == outputs.shape
     ce = targets * np.log(outputs)
     N = outputs.shape[0]
-    return -1 * np.sum(ce) / -N
+    return np.sum(ce) / -N
 
 class SoftmaxModel:
 
@@ -59,37 +59,19 @@ class SoftmaxModel:
         for size in self.neurons_per_layer:
             w_shape = (prev, size)
             print("Initializing weight to shape:", w_shape)
-            w = np.zeros(w_shape)
+            w = np.random.uniform(-1, 1, w_shape)
+            #w = np.zeros(w_shape)
             self.ws.append(w)
             prev = size
         self.grads = [np.zeros_like(self.ws[i]) for i in range(len(self.ws))]    
-    
-    def forward(self, X: np.ndarray) -> np.ndarray:
+
+    def forward(self, X: np.ndarray, return_full = False) -> np.ndarray:
         """
         Args:
             X: images of shape [batch size, 785]
         Returns:
             y: output of model with shape [batch size, num_outputs]
         """
-        activation = X
-        for i in range(len(self.ws) - 1):
-            z = activation.dot(self.ws[i])
-            activation = self.sigmoid(z)
-
-        z = np.exp(activation.dot(self.ws[-1]))
-        z_sum = z.sum(axis = 1, keepdims = True)
-        return z/z_sum
-        
-
-    def sigmoid(self, z):
-        """The sigmoid function."""
-        return 1.0/(1.0+np.exp(-z))
-    
-    def sigmoid_prime(self, z):
-        """Derivative of the sigmoid function."""
-        return self.sigmoid(z)*(1-self.sigmoid(z))
-
-    def compute_a_z(self, X: np.ndarray) -> np.ndarray:
         activation = X
         activations = [X]
         zs = []
@@ -104,9 +86,17 @@ class SoftmaxModel:
         z_sum = z.sum(axis = 1, keepdims = True)
         activation = z/z_sum
         activations.append(activation)
-        
-        return activations, zs
-        
+        if(return_full):
+            return activations, zs
+        return activations[-1]       
+
+    def sigmoid(self, z):
+        """The sigmoid function."""
+        return 1.0/(1.0+np.exp(-z))
+    
+    def sigmoid_prime(self, z):
+        """Derivative of the sigmoid function."""
+        return self.sigmoid(z)*(1-self.sigmoid(z)) 
 
     def backward(self, X: np.ndarray, outputs: np.ndarray,
                  targets: np.ndarray) -> None:
@@ -122,9 +112,9 @@ class SoftmaxModel:
 
         # A list of gradients.
         # For example, self.grads[0] will be the gradient for the first hidden layer
-        activations, zs = self.compute_a_z(X)
+        activations, zs = self.forward(X, return_full = True)
         
-        delta = (targets - outputs)
+        delta = -(targets - outputs)
         self.grads[-1] = np.dot(delta.transpose(), activations[-2]).T / X.shape[0]
         for l in range(1, len(self.neurons_per_layer)):
             z = zs[-l-1]
