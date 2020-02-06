@@ -110,6 +110,7 @@ class SoftmaxModel:
 
     def backward(self, X: np.ndarray, outputs: np.ndarray,
                  targets: np.ndarray) -> None:
+
         """
         Args:
             X: images of shape [batch size, 785]
@@ -121,32 +122,17 @@ class SoftmaxModel:
 
         # A list of gradients.
         # For example, self.grads[0] will be the gradient for the first hidden layer
-        #self.grads = np.zeros_like(self.ws)
         activations, zs = self.compute_a_z(X)
         
-        delta = -1 * (outputs - activations[-1]) * self.sigmoid_prime(zs[-1])
-        print("delta first" + str(delta.shape))
-        print("outputs " + str(outputs.shape))
-        print("self.sigmoid_prime(zs[-1]) " + str(self.sigmoid_prime(zs[-1]).shape))
-        print("self.grads[-1] " + str(self.grads[-1].shape))
-        print("activations[-2] " + str(activations[-2].shape))
-        print("np.dot(delta.transpose(), activations[-2])" + str((np.dot(delta.transpose(), activations[-2])).shape))
-        print()
-        self.grads[-1] = np.dot(delta.transpose(), activations[-2]).T
+        delta = (targets - outputs)
+        self.grads[-1] = np.dot(delta.transpose(), activations[-2]).T / X.shape[0]
         for l in range(1, len(self.neurons_per_layer)):
             z = zs[-l-1]
             sp = self.sigmoid_prime(z)
-            print("delta_prev " + str(delta.shape))
-            # should be: delta = np.dot(self.ws[-l], delta.transpose()) * sp
-            delta = np.dot(self.ws[-l], delta.transpose()) @ sp
-            print("self.ws[-l] "+str(self.ws[-l].shape))
-            print("sp "+str(self.ws[-l].shape))
-            print("delta_after " + str(delta.shape))
-            print("activations[-l-2] " + str(activations[-l-2].shape))
-            print("self.grads[-l-1] " + str(self.grads[-l-1].shape))
-            self.grads[-l-1] = np.dot(delta, activations[-l-2].transpose())
+            delta = np.dot(self.ws[-l], delta.transpose()) 
+            delta_sp = delta * sp.T
+            self.grads[-l-1] = np.dot(delta_sp, activations[-l-2]).T / X.shape[0]
 
-#
         for grad, w in zip(self.grads, self.ws):
             assert grad.shape == w.shape,\
                 f"Expected the same shape. Grad shape: {grad.shape}, w: {w.shape}."
@@ -194,6 +180,7 @@ def gradient_approximation_test(
                 model.backward(X, logits, Y)
                 difference = gradient_approximation - \
                     model.grads[layer_idx][i, j]
+
                 assert abs(difference) <= epsilon**2,\
                     f"Calculated gradient is incorrect. " \
                     f"Layer IDX = {layer_idx}, i={i}, j={j}.\n" \
@@ -229,6 +216,6 @@ if __name__ == "__main__":
         err_msg="Since the weights are all 0's, the softmax activation should be 1/10")
 
     # Gradient approximation check for 100 images
-    X_train = X_train[:100]
-    Y_train = Y_train[:100]
+    X_train = X_train[:10]
+    Y_train = Y_train[:10]
     gradient_approximation_test(model, X_train, Y_train)
