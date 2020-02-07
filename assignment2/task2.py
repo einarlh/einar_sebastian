@@ -136,7 +136,7 @@ if __name__ == "__main__":
     # Plot loss
     plt.figure(figsize=(20, 8))
     plt.subplot(1, 2, 1)
-    #plt.ylim([0.1, .5])
+    plt.ylim([0.1, .5])
     utils.plot_loss(train_loss, "Training Loss")
     utils.plot_loss(val_loss, "Validation Loss")
     plt.xlabel("Number of gradient steps")
@@ -144,7 +144,7 @@ if __name__ == "__main__":
     plt.legend()
     plt.subplot(1, 2, 2)
     # Plot accuracy
-    #plt.ylim([0.9, 1.0])
+    plt.ylim([0.85, 1.0])
     utils.plot_loss(train_accuracy, "Training Accuracy")
     utils.plot_loss(val_accuracy, "Validation Accuracy")
     plt.legend()

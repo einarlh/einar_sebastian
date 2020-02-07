@@ -59,7 +59,10 @@ class SoftmaxModel:
         for size in self.neurons_per_layer:
             w_shape = (prev, size)
             print("Initializing weight to shape:", w_shape)
-            w = np.random.uniform(-1, 1, w_shape)
+            if use_improved_weight_init:
+                w = np.random.normal(0, 1/np.sqrt(prev), w_shape)
+            else:
+                w = np.random.uniform(-1, 1, w_shape)
             #w = np.zeros(w_shape)
             self.ws.append(w)
             prev = size
@@ -78,7 +81,7 @@ class SoftmaxModel:
         for i in range(len(self.ws) - 1):
             z = activation.dot(self.ws[i])
             zs.append(z)
-            activation = self.sigmoid(z)
+            activation = self.improved_sigmoid(z)
             activations.append(activation)
 
         z = np.exp(activation.dot(self.ws[-1]))
@@ -97,6 +100,20 @@ class SoftmaxModel:
     def sigmoid_prime(self, z):
         """Derivative of the sigmoid function."""
         return self.sigmoid(z)*(1-self.sigmoid(z)) 
+
+    def improved_sigmoid(self, z):
+        """The sigmoid function."""
+        if self.use_improved_sigmoid:
+            return 1.7159 * np.tanh(2/3 * z)
+        else:
+            return self.sigmoid(z)
+    
+    def improved_sigmoid_prime(self, z):
+        """Derivative of the sigmoid function."""
+        if self.use_improved_sigmoid:
+            return 1.7159 * 2/3 * (1 - np.power(np.tanh(2/3 * z), 2.0))
+        else: 
+            return self.sigmoid_prime(z)
 
     def backward(self, X: np.ndarray, outputs: np.ndarray,
                  targets: np.ndarray) -> None:
@@ -118,7 +135,7 @@ class SoftmaxModel:
         self.grads[-1] = np.dot(delta.transpose(), activations[-2]).T / X.shape[0]
         for l in range(1, len(self.neurons_per_layer)):
             z = zs[-l-1]
-            sp = self.sigmoid_prime(z)
+            sp = self.improved_sigmoid_prime(z)
             delta = np.dot(self.ws[-l], delta.transpose()) 
             delta_sp = delta * sp.T
             self.grads[-l-1] = np.dot(delta_sp, activations[-l-2]).T / X.shape[0]
