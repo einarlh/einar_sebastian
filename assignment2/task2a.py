@@ -5,7 +5,7 @@ np.random.seed(1)
 
 
 
-def pre_process_images(X: np.ndarray, x_mean = 128, x_std = 50):
+def pre_process_images(X: np.ndarray, x_mean = 33.31, x_std = 78.57):
     
     """
     Args:
@@ -15,6 +15,7 @@ def pre_process_images(X: np.ndarray, x_mean = 128, x_std = 50):
         
     Default values to allow the instructor tests to run
     """
+
     assert X.shape[1] == 784,\
         f"X.shape[1]: {X.shape[1]}, should be 784"
     X = (X - x_mean) / x_std
@@ -103,15 +104,23 @@ class SoftmaxModel:
 
     def improved_sigmoid(self, z):
         """The sigmoid function."""
+        improved_sigmoid_a = 1.7159
+        improved_sigmoid_b = 0.666
         if self.use_improved_sigmoid:
-            return 1.7159 * np.tanh(2/3 * z)
+            return improved_sigmoid_a * np.tanh(improved_sigmoid_b * z)
+            #return 1.7159 * np.tanh(0.666 * z)
         else:
             return self.sigmoid(z)
     
     def improved_sigmoid_prime(self, z):
         """Derivative of the sigmoid function."""
+        improved_sigmoid_a = 1.7159
+        improved_sigmoid_b = 0.666
         if self.use_improved_sigmoid:
-            return 1.7159 * 2/3 * (1 - np.power(np.tanh(2/3 * z), 2.0))
+            top = 2 * improved_sigmoid_a * improved_sigmoid_b
+            denom = np.cosh(2 * improved_sigmoid_b * z) + 1
+            return top / denom
+            #return  * 0.666 * (1 - np.power(np.tanh(0.666 * z), 2.0))
         else: 
             return self.sigmoid_prime(z)
 
@@ -130,15 +139,15 @@ class SoftmaxModel:
         # A list of gradients.
         # For example, self.grads[0] will be the gradient for the first hidden layer
         activations, zs = self.forward(X, return_full = True)
-        
         delta = -(targets - outputs)
-        self.grads[-1] = np.dot(delta.transpose(), activations[-2]).T / X.shape[0]
+        self.grads[-1] = np.dot(activations[-2].T, delta) / X.shape[0]
         for l in range(1, len(self.neurons_per_layer)):
             z = zs[-l-1]
             sp = self.improved_sigmoid_prime(z)
-            delta = np.dot(self.ws[-l], delta.transpose()) 
-            delta_sp = delta * sp.T
-            self.grads[-l-1] = np.dot(delta_sp, activations[-l-2]).T / X.shape[0]
+            delta = np.dot(delta, self.ws[-l].T) 
+            #delta = np.dot(self.ws[-l], delta.transpose()) 
+            delta_sp = delta * sp
+            self.grads[-l-1] = np.dot(delta_sp.T, activations[-l-2]).T / X.shape[0]
 
         for grad, w in zip(self.grads, self.ws):
             assert grad.shape == w.shape,\
@@ -169,7 +178,7 @@ def gradient_approximation_test(
         Numerical approximation for gradients. Should not be edited. 
         Details about this test is given in the appendix in the assignment.
     """
-    epsilon = 1e-3
+    epsilon = 0.05
     for layer_idx, w in enumerate(model.ws):
         for i in range(w.shape[0]):
             for j in range(w.shape[1]):

@@ -84,7 +84,7 @@ def train(
                 _val_loss = cross_entropy_loss(Y_val, model.forward(X_val))
                 val_loss[global_step] = _val_loss
 
-                _train_loss = cross_entropy_loss(Y_batch, outputs)
+                _train_loss = cross_entropy_loss(Y_train, model.forward(X_train))
                 train_loss[global_step] = _train_loss
 
                 train_accuracy[global_step] = calculate_accuracy(
