@@ -102,8 +102,9 @@ def train(
             X_train, Y_train = unison_shuffled_copies(X_train, Y_train)
     return model, train_loss, val_loss, train_accuracy, val_accuracy
 
-
+    
 def plot_loss(basename, displayname, fmt_string_train, fmt_string_val):
+    #function to plot the loss using a pickled matrix as data
     train_loss_loaded = []
     val_loss_loaded = []
     train_path = 'data/train_loss_' + basename + '.pickle'
@@ -117,6 +118,7 @@ def plot_loss(basename, displayname, fmt_string_train, fmt_string_val):
 
 
 def plot_accuracy(basename, displayname, fmt_string_train, fmt_string_val):
+    #function to plot the accuracy using a pickled matrix as data
     train_accuracy_loaded = []
     val_accuracy_loaded = []
     train_path = 'data/train_accuracy_' + basename + '.pickle'
@@ -187,7 +189,7 @@ if __name__ == "__main__":
     print("Final Test accuracy:",
           calculate_accuracy(X_test, Y_test, model))
 
-#    Use pickle to save the losses and accuracies
+    # Use pickle to save the losses and accuracies
     savename = 'double_60_60'
     with open('data/train_loss_' + savename + '.pickle', 'wb') as file:
         pickle.dump(train_loss, file)
@@ -201,6 +203,7 @@ if __name__ == "__main__":
     # Plot loss
     plt.figure(figsize=(20, 8))
 
+    #Flags to enable and disable plots
     plot_base = True
     plot_shuffle = False 
     plot_sigma = False
@@ -236,6 +239,7 @@ if __name__ == "__main__":
     if plot_double_hidden_60:
         plot_loss('double_60_60', 'Double Hidden 60', '-y', '--y')
 
+    #adding labels to loss plot
     plt.ylim([0, .5])
     plt.xlabel("Number of gradient steps")
     plt.ylabel("Cross Entropy Loss")
@@ -269,12 +273,10 @@ if __name__ == "__main__":
     if plot_hidden_128: 
         plot_accuracy('hidden_128', 'Single Hidden 128', '-c', '--c')
 
-
+    #label accuracy plot
     plt.ylim([0.9, 1.0])
     plt.legend()
     plt.xlabel("Number of gradient steps")
     plt.ylabel("Accuracy")
-    # utils.plot_loss(train_accuracy_prev, "Training Accuracy Shuffled", fmt = '-g')
-    # utils.plot_loss(val_accuracy_prev, "Validation Accuracy Shuffled", fmt = '--g')
     plt.savefig("softmax_train_graph.png")
     plt.show()

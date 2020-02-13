@@ -128,44 +128,44 @@ if __name__ == "__main__":
     use_improved_weight_init = True
     use_momentum = True
 
-    # model = SoftmaxModel(
-    #     neurons_per_layer,
-    #     use_improved_sigmoid,
-    #     use_improved_weight_init)
-    # model, train_loss, val_loss, train_accuracy, val_accuracy = train(
-    #     model,
-    #     [X_train, Y_train, X_val, Y_val, X_test, Y_test],
-    #     num_epochs=num_epochs,
-    #     learning_rate=learning_rate,
-    #     batch_size=batch_size,
-    #     use_shuffle=use_shuffle,
-    #     use_momentum=use_momentum,
-    #     momentum_gamma=momentum_gamma)
+    model = SoftmaxModel(
+        neurons_per_layer,
+        use_improved_sigmoid,
+        use_improved_weight_init)
+    model, train_loss, val_loss, train_accuracy, val_accuracy = train(
+        model,
+        [X_train, Y_train, X_val, Y_val, X_test, Y_test],
+        num_epochs=num_epochs,
+        learning_rate=learning_rate,
+        batch_size=batch_size,
+        use_shuffle=use_shuffle,
+        use_momentum=use_momentum,
+        momentum_gamma=momentum_gamma)
 
-    # print("Final Train Cross Entropy Loss:",
-    #       cross_entropy_loss(Y_train, model.forward(X_train)))
-    # print("Final Validation Cross Entropy Loss:",
-    #       cross_entropy_loss(Y_val, model.forward(X_val)))
-    # print("Final Test Cross Entropy Loss:",
-    #       cross_entropy_loss(Y_test, model.forward(X_test)))
+    print("Final Train Cross Entropy Loss:",
+          cross_entropy_loss(Y_train, model.forward(X_train)))
+    print("Final Validation Cross Entropy Loss:",
+          cross_entropy_loss(Y_val, model.forward(X_val)))
+    print("Final Test Cross Entropy Loss:",
+          cross_entropy_loss(Y_test, model.forward(X_test)))
 
-    # print("Final Train accuracy:",
-    #       calculate_accuracy(X_train, Y_train, model))
-    # print("Final Validation accuracy:",
-    #       calculate_accuracy(X_val, Y_val, model))
-    # print("Final Test accuracy:",
-    #       calculate_accuracy(X_test, Y_test, model))
+    print("Final Train accuracy:",
+          calculate_accuracy(X_train, Y_train, model))
+    print("Final Validation accuracy:",
+          calculate_accuracy(X_val, Y_val, model))
+    print("Final Test accuracy:",
+          calculate_accuracy(X_test, Y_test, model))
 
     # Use pickle to save the losses and accuracies
-    # savename = 'momentum_3d'
-    # with open('data/train_loss_' + savename + '.pickle', 'wb') as file:
-    #     pickle.dump(train_loss, file)
-    # with open('data/val_loss_' + savename + '.pickle', 'wb') as file:
-    #     pickle.dump(val_loss, file)
-    # with open('data/train_accuracy_' + savename + '.pickle', 'wb') as file:
-    #     pickle.dump(train_accuracy, file)
-    # with open('data/val_accuracy_' + savename + '.pickle', 'wb') as file:
-    #     pickle.dump(val_accuracy, file)
+    savename = 'momentum_3d'
+    with open('data/train_loss_' + savename + '.pickle', 'wb') as file:
+        pickle.dump(train_loss, file)
+    with open('data/val_loss_' + savename + '.pickle', 'wb') as file:
+        pickle.dump(val_loss, file)
+    with open('data/train_accuracy_' + savename + '.pickle', 'wb') as file:
+        pickle.dump(train_accuracy, file)
+    with open('data/val_accuracy_' + savename + '.pickle', 'wb') as file:
+        pickle.dump(val_accuracy, file)
 
     # Plot loss
     plt.figure(figsize=(20, 8))
