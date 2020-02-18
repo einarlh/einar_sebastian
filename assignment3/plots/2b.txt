@@ -1,0 +1,8 @@
+Last accuracy
+Validation Loss: 0.86,  Validation Accuracy: 0.730
+Test Loss: 0.83,        Test Accuracy: 0.740
+Train Loss: 0.31,       Train Accuracy: 0.900
+Best accuracy
+Validation Loss: 0.79,  Validation Accuracy: 0.736
+Test Loss: 0.76,        Test Accuracy: 0.733
+Train Loss: 0.47,       Train Accuracy: 0.841

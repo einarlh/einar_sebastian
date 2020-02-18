@@ -124,7 +124,9 @@ class Trainer:
         print(self.model)
 
         # Define our optimizer. SGD = Stochastich Gradient Descent
-        self.optimizer = torch.optim.SGD(self.model.parameters(),
+        # self.optimizer = torch.optim.SGD(self.model.parameters(),
+        #                                  self.learning_rate)
+        self.optimizer = torch.optim.Adam(self.model.parameters(),
                                          self.learning_rate)
 
         # self.optimizer = torch.optim.adam(self.model.parameters(),
@@ -149,33 +151,28 @@ class Trainer:
 
     def print_val_test_train_stats(self):
         self.model.eval()
-
+        output = ""
         validation_loss, validation_acc = compute_loss_and_accuracy(
             self.dataloader_val, self.model, self.loss_criterion
         )
-        print(
-            f"Validation Loss: {validation_loss:.2f},",
-            f"Validation Accuracy: {validation_acc:.3f}",
-            sep="\t")
 
+        # val_str = f"Validation Loss: {validation_loss:.2f}, Validation Accuracy: {validation_acc:.3f}", sep="\t"
 
         test_loss, test_acc = compute_loss_and_accuracy(
             self.dataloader_test, self.model, self.loss_criterion
         )
-        print(
-            f"Test Loss: {test_loss:.2f},",
-            f"Test Accuracy: {test_acc:.3f}",
-            sep="\t")
 
         train_loss, train_acc = compute_loss_and_accuracy(
             self.dataloader_train, self.model, self.loss_criterion
         )
-        print(
-            f"Train Loss: {train_loss:.2f},",
-            f"Train Accuracy: {train_acc:.3f}",
-            sep="\t")
-
+        train_str = "Train Loss: {0:.2f}, Train Accuracy: {1:.3f}".format(train_loss, train_acc)
+        val_str = "Validation Loss: {0:.2f}, Validation Accuracy: {1:.3f}".format(validation_loss, validation_acc)
+        test_str = "Test Loss: {0:.2f}, Test Accuracy: {1:.3f}".format(test_loss, test_acc)
+        
         self.model.train()
+        output = train_str + str('\n') + val_str + str('\n') + test_str
+        print(output)
+        return output
 
 
     def validation_epoch(self):
@@ -304,19 +301,19 @@ def create_plots(trainer: Trainer, name: str):
     plt.show()
 
 
-if __name__ == "__main__":
-    epochs = 5
-    batch_size = 64
-    learning_rate = 5e-3
-    early_stop_count = 2
-    dataloaders = load_cifar10(batch_size)
-    model = ExampleModel(image_channels=3, num_classes=10)
-    trainer = Trainer(
-        batch_size,
-        learning_rate,
-        early_stop_count,
-        epochs,
-        model,
-        dataloaders
-    )
+# if __name__ == "__main__":
+#     epochs = 1
+#     batch_size = 64
+#     learning_rate = 5e-4
+#     early_stop_count = 2
+#     dataloaders = load_cifar10(batch_size)
+#     model = ExampleModel(image_channels=3, num_classes=10)
+#     trainer = Trainer(
+#         batch_size,
+#         learning_rate,
+#         early_stop_count,
+#         epochs,
+#         model,
+#         dataloaders
+#     )
 
