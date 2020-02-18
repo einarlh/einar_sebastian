@@ -111,7 +111,7 @@ with open("progress.txt", "a") as text_file:
     trainer.print_val_test_train_stats()
     trainer.load_best_model()
     time = strftime("%m-%d%H%M%S", gmtime())
-    model_name = "task3_v3_2_kaiming_weights_Adam_horizontal_flip" + time
+    model_name = "task3_v3_7_kaiming_weights_Adam_random_horizontal_flip_random_affine" + time
     print("Best accuracy " + model_name)
     text_file.write("Best accuracy " + model_name + "\n")
     output = trainer.print_val_test_train_stats()
