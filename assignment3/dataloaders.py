@@ -33,26 +33,6 @@ def load_cifar10(batch_size: int, validation_fraction: float = 0.1
         transforms.Normalize(mean, std),
         # transforms.RandomErasing(),
     ])
-
-    transform_train_3 = transforms.Compose([
-#       transforms.RandomHorizontalFlip(0.5),
-       transforms.RandomVerticalFlip(),
-#       transforms.ColorJitter(brightness = 0.5, contrast = 0.5, saturation = 0.5, hue = 0.5),
-        transforms.RandomAffine(degrees = (-20, 20)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean, std),
-        # transforms.RandomErasing(),
-    ])
-
-    transform_train_4 = transforms.Compose([
-       transforms.RandomHorizontalFlip(0.5),
-#       transforms.RandomVerticalFlip(),
-       transforms.ColorJitter(brightness = 0.5, contrast = 0.5, saturation = 0.5, hue = 0.5),
-#        transforms.RandomAffine(degrees = (-20, 20)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean, std),
-        # transforms.RandomErasing(),
-    ])
     transform_test = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
@@ -65,16 +45,8 @@ def load_cifar10(batch_size: int, validation_fraction: float = 0.1
                                   train=True,
                                   download=True,
                                   transform=transform_train_2)
-    data_train_3 = datasets.CIFAR10('data/cifar10',
-                                  train=True,
-                                  download=True,
-                                  transform=transform_train_3)
-    data_train_4 = datasets.CIFAR10('data/cifar10',
-                                  train=True,
-                                  download=True,
-                                  transform=transform_train_4)
 
-    data_train = ConcatDataset((data_train_1, data_train_2, data_train_3, data_train_4))
+    data_train = ConcatDataset((data_train_1, data_train_2))
 
     data_test = datasets.CIFAR10('data/cifar10',
                                  train=False,
