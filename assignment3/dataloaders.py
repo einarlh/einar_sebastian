@@ -14,39 +14,25 @@ def load_cifar10(batch_size: int, validation_fraction: float = 0.1
                  ) -> typing.List[torch.utils.data.DataLoader]:
     # Note that transform train will apply the same transform for
     # validation!
-    transform_train_1 = transforms.Compose([
+    transform_train = transforms.Compose([
        transforms.RandomHorizontalFlip(0.5),
 #       transforms.RandomVerticalFlip(),
 #       transforms.ColorJitter(brightness = 0.5, contrast = 0.5, saturation = 0.5, hue = 0.5),
-        transforms.RandomAffine(degrees = (-20, 20)),
+        # transforms.RandomAffine(degrees = (-20, 20)),
         transforms.ToTensor(),
         transforms.Normalize(mean, std),
         # transforms.RandomErasing(),
     ])
 
-    transform_train_2 = transforms.Compose([
-       transforms.RandomHorizontalFlip(0.5),
-#       transforms.RandomVerticalFlip(),
-#       transforms.ColorJitter(brightness = 0.5, contrast = 0.5, saturation = 0.5, hue = 0.5),
-        transforms.RandomAffine(degrees = (-20, 20)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean, std),
-        # transforms.RandomErasing(),
-    ])
+
     transform_test = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
     ])
-    data_train_1 = datasets.CIFAR10('data/cifar10',
+    data_train = datasets.CIFAR10('data/cifar10',
                                   train=True,
                                   download=True,
-                                  transform=transform_train_1)
-    data_train_2 = datasets.CIFAR10('data/cifar10',
-                                  train=True,
-                                  download=True,
-                                  transform=transform_train_2)
-
-    data_train = ConcatDataset((data_train_1, data_train_2))
+                                  transform=transform_train)
 
     data_test = datasets.CIFAR10('data/cifar10',
                                  train=False,

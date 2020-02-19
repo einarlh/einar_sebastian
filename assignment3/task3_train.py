@@ -28,7 +28,7 @@ class ExampleModel(nn.Module):
                 num_classes: Number of classes we want to predict (10)
         """
         super().__init__()
-        num_filters = [32, 64, 128]  # Set number of filters in first conv layer
+        num_filters = [64, 128, 256, 256, 256]  # Set number of filters in first conv layer
         self.num_classes = num_classes
         # Define the convolutional layers
         self.feature_extractor = nn.Sequential(
@@ -40,8 +40,6 @@ class ExampleModel(nn.Module):
                 padding=2
             ),
             nn.ReLU(),
-            nn.MaxPool2d((2,2), 2),
-
             nn.Conv2d(
                 in_channels=num_filters[0],
                 out_channels=num_filters[1],
@@ -51,20 +49,50 @@ class ExampleModel(nn.Module):
             ),
             nn.ReLU(),
             nn.MaxPool2d((2,2), 2),
+            nn.Dropout(0.25),
 
             nn.Conv2d(
                 in_channels=num_filters[1],
                 out_channels=num_filters[2],
-                kernel_size=5,
+                kernel_size=3,
                 stride=1,
-                padding=2
+                padding=1
+            ),
+            nn.ReLU(),
+
+            nn.Conv2d(
+                in_channels=num_filters[2],
+                out_channels=num_filters[3],
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            nn.ReLU(),
+
+            nn.Conv2d(
+                in_channels=num_filters[3],
+                out_channels=num_filters[4],
+                kernel_size=3,
+                stride=1,
+                padding=1
+            ),
+            nn.ReLU(),
+
+            nn.Conv2d(
+                in_channels=num_filters[3],
+                out_channels=num_filters[4],
+                kernel_size=3,
+                stride=1,
+                padding=1
             ),
             nn.ReLU(),
             nn.MaxPool2d((2,2), 2),
+            nn.Dropout(0.25),
+
         )
         # The output of feature_extractor will be [batch_size, num_filters, 16, 16]
-        self.num_output_features = 1*1*2048
-        self.classifier_weights = [self.num_output_features, 64, num_classes]
+        self.num_output_features = 16384
+        self.classifier_weights = [self.num_output_features, 256, 64, num_classes]
         # Initialize our last fully connected layer
         # Inputs all extracted features from the convolutional layers
         # Outputs num_classes predictions, 1 for each class.
@@ -74,6 +102,8 @@ class ExampleModel(nn.Module):
             nn.Linear(self.classifier_weights[0], self.classifier_weights[1]),
             nn.ReLU(),
             nn.Linear(self.classifier_weights[1], self.classifier_weights[2]),
+            nn.ReLU(),
+            nn.Linear(self.classifier_weights[2 ], self.classifier_weights[3]),
         )
         self.apply(init_weights)
 
@@ -111,7 +141,7 @@ with open("progress.txt", "a") as text_file:
     trainer.print_val_test_train_stats()
     trainer.load_best_model()
     time = strftime("%m-%d%H%M%S", gmtime())
-    model_name = "task3_v3_7_kaiming_weights_Adam_random_horizontal_flip_random_affine" + time
+    model_name = "task3_v8_2_filter_size_3_3_second_layer_dropout" + time
     print("Best accuracy " + model_name)
     text_file.write("Best accuracy " + model_name + "\n")
     output = trainer.print_val_test_train_stats()
