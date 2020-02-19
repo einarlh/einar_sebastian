@@ -28,7 +28,7 @@ class ExampleModel(nn.Module):
                 num_classes: Number of classes we want to predict (10)
         """
         super().__init__()
-        num_filters = [64, 128, 256, 256, 256]  # Set number of filters in first conv layer
+        num_filters = [32, 64, 128, 128, 128]  # Set number of filters in first conv layer
         self.num_classes = num_classes
         # Define the convolutional layers
         self.feature_extractor = nn.Sequential(
@@ -69,14 +69,14 @@ class ExampleModel(nn.Module):
             ),
             nn.ReLU(),
 
-            nn.Conv2d(
-                in_channels=num_filters[3],
-                out_channels=num_filters[4],
-                kernel_size=3,
-                stride=1,
-                padding=1
-            ),
-            nn.ReLU(),
+            # nn.Conv2d(
+            #     in_channels=num_filters[3],
+            #     out_channels=num_filters[4],
+            #     kernel_size=3,
+            #     stride=1,
+            #     padding=1
+            # ),
+            # nn.ReLU(),
 
             nn.Conv2d(
                 in_channels=num_filters[3],
@@ -91,7 +91,7 @@ class ExampleModel(nn.Module):
 
         )
         # The output of feature_extractor will be [batch_size, num_filters, 16, 16]
-        self.num_output_features = 16384
+        self.num_output_features = 8192
         self.classifier_weights = [self.num_output_features, 256, 64, num_classes]
         # Initialize our last fully connected layer
         # Inputs all extracted features from the convolutional layers
@@ -141,7 +141,7 @@ with open("progress.txt", "a") as text_file:
     trainer.print_val_test_train_stats()
     trainer.load_best_model()
     time = strftime("%m-%d%H%M%S", gmtime())
-    model_name = "task3_v8_2_filter_size_3_3_second_layer_dropout" + time
+    model_name = "task3_v8_3_filter_size_3_3_second_layer_dropout" + time
     print("Best accuracy " + model_name)
     text_file.write("Best accuracy " + model_name + "\n")
     output = trainer.print_val_test_train_stats()
