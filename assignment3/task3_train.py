@@ -49,7 +49,6 @@ class ExampleModel(nn.Module):
             ),
             nn.ReLU(),
             nn.MaxPool2d((2,2), 2),
-            nn.Dropout(0.25),
 
             nn.Conv2d(
                 in_channels=num_filters[1],
@@ -87,7 +86,6 @@ class ExampleModel(nn.Module):
             ),
             nn.ReLU(),
             nn.MaxPool2d((2,2), 2),
-            nn.Dropout(0.25),
 
         )
         # The output of feature_extractor will be [batch_size, num_filters, 16, 16]
