@@ -127,8 +127,7 @@ class Trainer:
         # self.optimizer = torch.optim.SGD(self.model.parameters(),
         #                                  self.learning_rate)
         self.optimizer = torch.optim.Adam(self.model.parameters(),
-                                         self.learning_rate,
-                                         weight_decay = 1e-4)
+                                         self.learning_rate)
 
         # self.optimizer = torch.optim.adam(self.model.parameters(),
         #                                  self.learning_rate)

@@ -26,7 +26,7 @@ activation = first_conv_layer(image)
 print("Activation shape:", activation.shape)
 
 
-def torch_image_to_numpy(image: torch.Tensor):
+def torch_image_to_numpy(image):
     """
     Function to transform a pytorch tensor to numpy image
     Args:
@@ -45,5 +45,21 @@ def torch_image_to_numpy(image: torch.Tensor):
     image = np.moveaxis(image, 0, 2)
     return image
 
-
 indices = [14, 26, 32, 49, 52]
+for i in range(len(indices)):
+    indice = indices[i]
+    img_np = torch_image_to_numpy(activation[0,indice,:,:])
+    plt.subplot(2,5, i + 1) 
+    imgplot = plt.imshow(img_np, cmap='gray')
+
+for i in range(len(indices)):
+    indice = indices[i]
+    img_np = torch_image_to_numpy(first_conv_layer.weight[indice,:,:,:])
+    plt.subplot(2,5, i + 6) 
+    imgplot = plt.imshow(img_np)
+
+plt.subplots_adjust(wspace = 0.6)
+plt.subplots_adjust(hspace = 0.05)
+
+plt.savefig("task_4b.png")
+plt.show()
