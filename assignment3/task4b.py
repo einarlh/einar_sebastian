@@ -45,21 +45,33 @@ def torch_image_to_numpy(image):
     image = np.moveaxis(image, 0, 2)
     return image
 
-indices = [14, 26, 32, 49, 52]
+print(list(model.children()))
+print(len(list(model.children())))
+
+model = list(model.children())
+model = model[0:-2]
+input_img = image
+for i in range(len(model)):
+    input_img = model[i](input_img)
+
+activation = input_img
+
+print(activation.shape)
+indices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 for i in range(len(indices)):
     indice = indices[i]
     img_np = torch_image_to_numpy(activation[0,indice,:,:])
     plt.subplot(2,5, i + 1) 
-    imgplot = plt.imshow(img_np, cmap='gray')
-
-for i in range(len(indices)):
-    indice = indices[i]
-    img_np = torch_image_to_numpy(first_conv_layer.weight[indice,:,:,:])
-    plt.subplot(2,5, i + 6) 
     imgplot = plt.imshow(img_np)
+
+# for i in range(len(indices)):
+#     indice = indices[i]
+#     img_np = torch_image_to_numpy(first_conv_layer.weight[indice,:,:,:])
+#     plt.subplot(2,5, i + 6) 
+#     imgplot = plt.imshow(img_np)
 
 plt.subplots_adjust(wspace = 0.6)
 plt.subplots_adjust(hspace = 0.05)
-
-plt.savefig("task_4b.png")
+plt.colorbar()
+plt.savefig("task_4c.png")
 plt.show()
