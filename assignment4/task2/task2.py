@@ -203,7 +203,6 @@ def get_precision_recall_curve(
 
     confidence_thresholds = np.linspace(0, 1, 500)
     # YOUR CODE HERE
-
     all_prediction_boxes = np.reshape(np.vstack(all_prediction_boxes), (-1, 4))
     all_gt_boxes = np.reshape(np.vstack(all_gt_boxes), (-1, 4))
     confidence_scores = np.hstack(confidence_scores)
@@ -236,6 +235,8 @@ def get_precision_recall_curve(
         acc_detections = calculate_individual_image_result(predicition_box_accumulated, gt_box_accumulated, iou_threshold)
         acc_tp = acc_detections.get("true_pos")
         acc_fp = acc_detections.get("false_pos")
+        acc_fn = acc_detections.get("false_neg")
+
         acc_recall = acc_tp / (total_tp + total_fn)
         acc_precision = acc_tp / (acc_tp + acc_fp)
         entry = np.array((confidence_scores[i], acc_precision, acc_recall))
@@ -244,40 +245,48 @@ def get_precision_recall_curve(
     pr_table = pr_table[1:,:]
     # print(pr_table)
     # print(pr_table[:,0])
-    unique_recall_values = np.array(list(set(list(pr_table[:,2]))))
+    # unique_recall_values = np.array(list(set(list(pr_table[:,2]))))
 
-    pr_table_unique_confidence = np.zeros((1,3))
-    for unique_confidence in unique_recall_values:
-        pr_table_val = pr_table[np.where(pr_table[:,2] == unique_confidence)]
-        pr_table_max = pr_table_val[np.argmax(pr_table_val[:,1])]
-        pr_table_max = np.reshape(pr_table_max, (1,3))
-        pr_table_unique_confidence = np.concatenate((pr_table_unique_confidence, pr_table_max), axis=0)
-        # pr_table_max_indices = [] 
-    pr_table = pr_table_unique_confidence[1:, :]
+    # pr_table_unique_confidence = np.zeros((1,3))
+    # for unique_confidence in unique_recall_values:
+    #     pr_table_val = pr_table[np.where(pr_table[:,2] == unique_confidence)]
+    #     pr_table_max = pr_table_val[np.argmax(pr_table_val[:,1])]
+    #     pr_table_max = np.reshape(pr_table_max, (1,3))
+    #     pr_table_unique_confidence = np.concatenate((pr_table_unique_confidence, pr_table_max), axis=0)
+    #     # pr_table_max_indices = [] 
+    # pr_table = pr_table_unique_confidence[1:, :]
 
     # sort the boxes according to the corresponding confidence scores in ascending order
-    pr_table = pr_table[pr_table[:,0].argsort()]
+    # pr_table = pr_table[pr_table[:,0].argsort()]
 
-    # reverse the order for descending order
-    pr_table = pr_table[::-1]
+    # # reverse the order for descending order
+    # pr_table = pr_table[::-1]
 
     precisions = [] 
     recalls = []
-    k = 0
-    for recall in confidence_thresholds:
-        row_candidates = np.where(pr_table[:,2] >= recall)
-        if len(row_candidates[0]) == 0:
-            precisions.append(0)
-            k = k + 1
-            recalls.append(recall)
-        else: 
-            # print(pr_table[row_candidates[0]])
-            table_row = (pr_table[row_candidates[0]][0,:])
-            precisions.append(table_row[1])
-            recalls.append(recall)
-            # precisions.append(pr_table[row_candidates(0)])
+    # print(pr_table)
+    for confidence in confidence_thresholds:
+        row_indices = np.where(pr_table[:,0] >= confidence)
+        rows = (pr_table[row_indices[0]])
+        row_count = rows.shape[0]
+        if row_count == 0:
+            row_count = 1
+        precisions.append(sum(rows[:,1]) / row_count)
+        recalls.append(sum(rows[:,2]) / row_count)
 
- 
+    print(np.array(recalls).sum())
+    # precisions = [] 
+    # recalls = []
+    # for recall in confidence_thresholds:
+    #     row_candidates = np.where(pr_table[:,2] >= recall)
+    #     if len(row_candidates[0]) == 0:
+    #         precisions.append(0)
+    #         recalls.append(recall)
+    #     else: 
+    #         table_row = (pr_table[row_candidates[0]][0,:])
+    #         precisions.append(table_row[1])
+    #         recalls.append(table_row[2])
+  
     return np.array(precisions), np.array(recalls)
 
 
