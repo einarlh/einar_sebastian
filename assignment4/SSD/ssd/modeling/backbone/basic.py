@@ -22,7 +22,7 @@ class BasicModel(torch.nn.Module):
         image_channels = cfg.MODEL.BACKBONE.INPUT_CHANNELS # 3 
         self.output_feature_size = cfg.MODEL.PRIORS.FEATURE_MAPS #[38, 19, 10, 5, 3, 1]
         self.num_filters = [
-                    64, 128, 128, output_channels[0], 
+                    64, 128, 128, 128, 128, 128, 128, output_channels[0], 
                     64, output_channels[1], 
                     128, output_channels[2],
                     128, output_channels[3],
@@ -61,48 +61,12 @@ class BasicModel(torch.nn.Module):
             ),
             nn.ReLU(),
             nn.Conv2d(
-                in_channels=self.num_filters[1],
-                out_channels=self.num_filters[2],
-                kernel_size=5,
-                stride=1,
-                padding=2
-            ),
-            nn.ReLU(),
-            nn.Conv2d(
-                in_channels=self.num_filters[1],
-                out_channels=self.num_filters[2],
-                kernel_size=5,
-                stride=1,
-                padding=2
-            ),
-            nn.ReLU(),
-            nn.Conv2d(
-                in_channels=self.num_filters[1],
-                out_channels=self.num_filters[2],
-                kernel_size=5,
-                stride=1,
-                padding=2
-            ),
-            nn.ReLU(),
-            nn.Conv2d(
-                in_channels=self.num_filters[1],
-                out_channels=self.num_filters[2],
-                kernel_size=5,
-                stride=1,
-                padding=2
-            ),
-            nn.ReLU(),
-
-                                                
-            #first output convolutional
-            nn.Conv2d(
                 in_channels=self.num_filters[2],
                 out_channels=self.num_filters[3],
                 kernel_size=5,
-                stride=2,
+                stride=1,
                 padding=2
             ),
-            nn.Dropout(p=0.12),
             nn.ReLU(),
             nn.Conv2d(
                 in_channels=self.num_filters[3],
@@ -112,17 +76,13 @@ class BasicModel(torch.nn.Module):
                 padding=2
             ),
             nn.ReLU(),
-            #second output convolutional
             nn.Conv2d(
                 in_channels=self.num_filters[4],
                 out_channels=self.num_filters[5],
-                kernel_size=3,
-                stride=2,
-                padding=1
+                kernel_size=5,
+                stride=1,
+                padding=2
             ),
-
-
-            nn.Dropout(p=0.12),
             nn.ReLU(),
             nn.Conv2d(
                 in_channels=self.num_filters[5],
@@ -132,7 +92,9 @@ class BasicModel(torch.nn.Module):
                 padding=2
             ),
             nn.ReLU(),
-            #third output convolutional
+
+                                                
+            #first output convolutional
             nn.Conv2d(
                 in_channels=self.num_filters[6],
                 out_channels=self.num_filters[7],
@@ -140,8 +102,6 @@ class BasicModel(torch.nn.Module):
                 stride=2,
                 padding=2
             ),
-
-
             nn.Dropout(p=0.12),
             nn.ReLU(),
             nn.Conv2d(
@@ -152,13 +112,13 @@ class BasicModel(torch.nn.Module):
                 padding=2
             ),
             nn.ReLU(),
-            #fourth output convolutional
+            #second output convolutional
             nn.Conv2d(
                 in_channels=self.num_filters[8],
                 out_channels=self.num_filters[9],
-                kernel_size=5,
+                kernel_size=3,
                 stride=2,
-                padding=2
+                padding=1
             ),
 
 
@@ -172,7 +132,7 @@ class BasicModel(torch.nn.Module):
                 padding=2
             ),
             nn.ReLU(),
-            #fifth output convolutional
+            #third output convolutional
             nn.Conv2d(
                 in_channels=self.num_filters[10],
                 out_channels=self.num_filters[11],
@@ -192,11 +152,51 @@ class BasicModel(torch.nn.Module):
                 padding=2
             ),
             nn.ReLU(),
-
-            #sixth output convolutional
+            #fourth output convolutional
             nn.Conv2d(
                 in_channels=self.num_filters[12],
                 out_channels=self.num_filters[13],
+                kernel_size=5,
+                stride=2,
+                padding=2
+            ),
+
+
+            nn.Dropout(p=0.12),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=self.num_filters[13],
+                out_channels=self.num_filters[14],
+                kernel_size=5,
+                stride=1,
+                padding=2
+            ),
+            nn.ReLU(),
+            #fifth output convolutional
+            nn.Conv2d(
+                in_channels=self.num_filters[14],
+                out_channels=self.num_filters[15],
+                kernel_size=5,
+                stride=2,
+                padding=2
+            ),
+
+
+            nn.Dropout(p=0.12),
+            nn.ReLU(),
+            nn.Conv2d(
+                in_channels=self.num_filters[15],
+                out_channels=self.num_filters[16],
+                kernel_size=5,
+                stride=1,
+                padding=2
+            ),
+            nn.ReLU(),
+
+            #sixth output convolutional
+            nn.Conv2d(
+                in_channels=self.num_filters[16],
+                out_channels=self.num_filters[17],
                 kernel_size=3,
                 stride=1,
                 padding=0
