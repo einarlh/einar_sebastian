@@ -1,7 +1,7 @@
 MODEL:
     NUM_CLASSES: 11
     BACKBONE:
-        NAME: 'vgg'
+        NAME: 'basic'
         PRETRAINED: False
         OUT_CHANNELS: [128, 256, 128, 128, 64, 64]
         INPUT_CHANNELS: 3
