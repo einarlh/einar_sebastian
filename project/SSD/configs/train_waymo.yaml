@@ -12,10 +12,11 @@ DATASETS:
     TRAIN: ("waymo_train",)
     TEST: ("waymo_val", )
 SOLVER:
-    MAX_ITER: 37000
-    LR_STEPS: [80000, 100000]
+    MAX_ITER: 36000
+    LR_STEPS: [28000, 32000]
     GAMMA: 0.1
     BATCH_SIZE: 16
-    LR: 1e-3
-OUTPUT_DIR: 'outputs/v2_1_batchnorm_lr_increase'
+    LR: 1e-2
+    WARMUP_ITERS: 1000
+OUTPUT_DIR: 'outputs/v2_2_updated_lr'
 DATASET_DIR: "datasets"
