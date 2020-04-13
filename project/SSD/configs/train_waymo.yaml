@@ -16,7 +16,8 @@ SOLVER:
     LR_STEPS: [28000, 32000]
     GAMMA: 0.1
     BATCH_SIZE: 16
-    LR: 1e-2
-    WARMUP_ITERS: 1000
-OUTPUT_DIR: 'outputs/v2_2_updated_lr'
+    LR: 5e-3
+    WARMUP_ITERS: 1500
+    WARMUP_FACTOR: 0.05
+OUTPUT_DIR: 'outputs/v2_4_decreased_lr'
 DATASET_DIR: "datasets"
