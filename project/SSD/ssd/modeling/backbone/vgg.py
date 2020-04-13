@@ -86,7 +86,7 @@ class VGG(nn.Module):
         vgg_config = vgg_base[str(size)]
         extras_config = extras_base[str(size)]
 
-        self.vgg = nn.ModuleList(add_vgg(vgg_config))
+        self.vgg = nn.ModuleList(add_vgg(vgg_config, batch_norm=True))
         self.extras = nn.ModuleList(add_extras(extras_config, i=1024, size=size))
         self.l2_norm = L2Norm(512, scale=20)
         self.reset_parameters()
@@ -102,13 +102,13 @@ class VGG(nn.Module):
 
     def forward(self, x):
         features = []
-        for i in range(23):
+        for i in range(33):
             x = self.vgg[i](x)
         s = self.l2_norm(x)  # Conv4_3 L2 normalization
         features.append(s)
 
         # apply vgg up to fc7
-        for i in range(23, len(self.vgg)):
+        for i in range(33, len(self.vgg)):
             x = self.vgg[i](x)
         features.append(x)
 

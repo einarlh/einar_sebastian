@@ -65,7 +65,7 @@ cfg.DATASETS.TEST = ()
 # -----------------------------------------------------------------------------
 cfg.DATA_LOADER = CN()
 # Number of data loading threads
-cfg.DATA_LOADER.NUM_WORKERS = 4
+cfg.DATA_LOADER.NUM_WORKERS = 16
 cfg.DATA_LOADER.PIN_MEMORY = True
 
 # ---------------------------------------------------------------------------- #
@@ -77,7 +77,7 @@ cfg.SOLVER.MAX_ITER = 120000
 cfg.SOLVER.LR_STEPS = [80000, 100000]
 cfg.SOLVER.GAMMA = 0.1
 cfg.SOLVER.BATCH_SIZE = 32
-cfg.SOLVER.LR = 1e-3
+cfg.SOLVER.LR = 5e-3
 cfg.SOLVER.MOMENTUM = 0.9
 cfg.SOLVER.WEIGHT_DECAY = 5e-4
 cfg.SOLVER.WARMUP_FACTOR = 1.0 / 3

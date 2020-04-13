@@ -2,7 +2,7 @@ MODEL:
     NUM_CLASSES: 5
     BACKBONE:
         NAME: 'vgg'
-        PRETRAINED: True
+        PRETRAINED: False
         #OUT_CHANNELS: [128, 256, 128, 128, 64, 64]
         OUT_CHANNELS: [512, 1024, 512, 256, 256, 256]
         INPUT_CHANNELS: 3
@@ -17,5 +17,5 @@ SOLVER:
     GAMMA: 0.1
     BATCH_SIZE: 16
     LR: 1e-3
-OUTPUT_DIR: 'outputs/VGG'
+OUTPUT_DIR: 'outputs/v2_1_batchnorm_lr_increase'
 DATASET_DIR: "datasets"
