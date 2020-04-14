@@ -7,8 +7,12 @@ class PostProcessor:
     def __init__(self, cfg):
         super().__init__()
         self.cfg = cfg
-        self.width = cfg.INPUT.IMAGE_SIZE
-        self.height = cfg.INPUT.IMAGE_SIZE
+        if isinstance(cfg.INPUT.IMAGE_SIZE, int):
+            self.width = cfg.INPUT.IMAGE_SIZE
+            self.height = cfg.INPUT.IMAGE_SIZE
+        else:
+            self.width = cfg.INPUT.IMAGE_SIZE[0]
+            self.height = cfg.INPUT.IMAGE_SIZE[1]
 
     def __call__(self, detections):
         batches_scores, batches_boxes = detections
@@ -37,7 +41,6 @@ class PostProcessor:
             # remove low scoring boxes
             indices = torch.nonzero(scores > self.cfg.TEST.CONFIDENCE_THRESHOLD).squeeze(1)
             boxes, scores, labels = boxes[indices], scores[indices], labels[indices]
-
             boxes[:, 0::2] *= self.width
             boxes[:, 1::2] *= self.height
 
