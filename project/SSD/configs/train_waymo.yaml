@@ -1,10 +1,11 @@
 MODEL:
     NUM_CLASSES: 5
     BACKBONE:
-        NAME: 'vgg'
-        PRETRAINED: False
+        NAME: 'resnet152'
+        PRETRAINED: True
         #OUT_CHANNELS: [128, 256, 128, 128, 64, 64]
-        OUT_CHANNELS: [512, 1024, 512, 256, 256, 256]
+        # OUT_CHANNELS: [512, 1024, 512, 256, 256, 256]
+        OUT_CHANNELS: [512, 1024, 2048, 512, 256, 256]
         INPUT_CHANNELS: 3
 INPUT:
     IMAGE_SIZE: 300
@@ -19,5 +20,5 @@ SOLVER:
     LR: 5e-3
     WARMUP_ITERS: 1500
     WARMUP_FACTOR: 0.05
-OUTPUT_DIR: 'outputs/v2_4_decreased_lr'
+OUTPUT_DIR: 'outputs/v3_2_resnet_pretrained'
 DATASET_DIR: "datasets"
