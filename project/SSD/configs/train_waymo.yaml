@@ -17,8 +17,8 @@ SOLVER:
     LR_STEPS: [28000, 32000]
     GAMMA: 0.1
     BATCH_SIZE: 16
-    LR: 5e-3
+    LR: 2e-3
     WARMUP_ITERS: 1500
-    WARMUP_FACTOR: 0.05
-OUTPUT_DIR: 'outputs/v3_2_resnet_pretrained'
+    WARMUP_FACTOR: 0.12
+OUTPUT_DIR: 'outputs/v3_3_resnet_decreased_lr'
 DATASET_DIR: "datasets"
