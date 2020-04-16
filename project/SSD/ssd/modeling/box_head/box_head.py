@@ -95,6 +95,7 @@ class BoxPredictor(nn.Module):
         for feature, cls_header, reg_header in zip(features, self.cls_headers, self.reg_headers):
             cls_logit = cls_header(feature).permute(0, 2, 3, 1).contiguous()
             bbox_pred = reg_header(feature).permute(0, 2, 3, 1).contiguous()
+            # print("Bbox_pred shape: " + str(bbox_pred.shape))
             cls_logits.append(cls_logit)
             bbox_preds.append(bbox_pred)
 

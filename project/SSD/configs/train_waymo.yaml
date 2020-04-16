@@ -1,14 +1,16 @@
 MODEL:
     NUM_CLASSES: 5
     BACKBONE:
-        NAME: 'resnet152'
+        NAME: 'googlenet'
         PRETRAINED: True
-        #OUT_CHANNELS: [128, 256, 128, 128, 64, 64]
-        # OUT_CHANNELS: [512, 1024, 512, 256, 256, 256]
-        OUT_CHANNELS: [512, 1024, 2048, 512, 256, 256]
+        # OUT_CHANNELS: [128, 256, 128, 128, 64, 64] #basic
+        # OUT_CHANNELS: [512, 1024, 512, 256, 256, 256] #vgg
+        # OUT_CHANNELS: [512, 1024, 2048, 512, 256, 256] #resnet152
+        # OUT_CHANNELS: [40, 96, 320, 512, 256, 256] #mnasnet
+        OUT_CHANNELS: [480, 832, 1024, 256, 512, 1024] #googlenet
         INPUT_CHANNELS: 3
 INPUT:
-    IMAGE_SIZE: 300
+    IMAGE_SIZE: [320, 240]
 DATASETS:
     TRAIN: ("waymo_train",)
     TEST: ("waymo_val", )
@@ -17,8 +19,8 @@ SOLVER:
     LR_STEPS: [28000, 32000]
     GAMMA: 0.1
     BATCH_SIZE: 16
-    LR: 2e-3
-    WARMUP_ITERS: 1500
-    WARMUP_FACTOR: 0.12
-OUTPUT_DIR: 'outputs/v3_4_resnet_input_normalization'
+    LR: 1.5e-3
+    WARMUP_ITERS: 1000
+    WARMUP_FACTOR: 0.2666
+OUTPUT_DIR: 'outputs/v4_8_testing'
 DATASET_DIR: "datasets"

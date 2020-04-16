@@ -124,11 +124,18 @@ class ToPercentCoords(object):
 
 class Resize(object):
     def __init__(self, size=300):
-        self.size = size
+        if isinstance(size, int):
+            self.width = size
+            self.height = size
+        else:
+            self.width = size[0]
+            self.height = size[1]
 
     def __call__(self, image, boxes=None, labels=None):
-        image = cv2.resize(image, (self.size,
-                                   self.size))
+        # print("Image size before resize: " + str(image.shape))
+        image = cv2.resize(image, (self.width,
+                                   self.height))
+        # print("Image size after resize: " + str(image.shape))
         return image, boxes, labels
 
 
@@ -224,7 +231,10 @@ class RandomBrightness(object):
 
 class ToTensor(object):
     def __call__(self, cvimage, boxes=None, labels=None):
-        return torch.from_numpy(cvimage.astype(np.float32)).permute(2, 0, 1), boxes, labels
+        # print("Before: CV image shape: " + str(cvimage.shape))
+        tensor = torch.from_numpy(cvimage.astype(np.float32)).permute(2, 0, 1), boxes, labels
+        # print("After: tensor shape: " + str(tensor[0].size()))
+        return tensor
 
 
 class RandomSampleCrop(object):

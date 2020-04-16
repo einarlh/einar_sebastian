@@ -25,8 +25,10 @@ cfg.MODEL.BACKBONE.INPUT_CHANNELS = 3
 # PRIORS
 # -----------------------------------------------------------------------------
 cfg.MODEL.PRIORS = CN()
-cfg.MODEL.PRIORS.FEATURE_MAPS = [38, 19, 10, 5, 3, 1]
-cfg.MODEL.PRIORS.STRIDES = [8, 16, 32, 64, 100, 300]
+# cfg.MODEL.PRIORS.FEATURE_MAPS = [[40, 30], [20, 15], [10, 8], [5,4], [3,2], [1,1]] #resnet
+# cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 16], [32, 30], [64, 60], [107, 120], [320, 240]] #resnnet
+cfg.MODEL.PRIORS.FEATURE_MAPS = [[40, 30], [20, 15], [10, 8], [5,5], [3,3], [1,1]] #googlenet
+cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 16], [32, 30], [64, 48], [107, 80], [320, 240]] #googlenet
 cfg.MODEL.PRIORS.MIN_SIZES = [30, 60, 111, 162, 213, 264]
 cfg.MODEL.PRIORS.MAX_SIZES = [60, 111, 162, 213, 264, 315]
 cfg.MODEL.PRIORS.ASPECT_RATIOS = [[2], [2, 3], [2, 3], [2, 3], [2], [2]]
@@ -47,10 +49,10 @@ cfg.MODEL.BOX_HEAD.PREDICTOR = 'SSDBoxPredictor'
 # -----------------------------------------------------------------------------
 cfg.INPUT = CN()
 # Image size
-cfg.INPUT.IMAGE_SIZE = 300
+cfg.INPUT.IMAGE_SIZE = [320, 240]
 # Values to be used for image normalization, RGB layout
 cfg.INPUT.PIXEL_MEAN = [123, 117, 104]
-cfg.INPUT.PIXE_STD = [0.229*255, 0.224*255, 0.225*255]
+cfg.INPUT.PIXEL_STD = [0.229*255, 0.224*255, 0.225*255]
 
 # -----------------------------------------------------------------------------
 # Dataset

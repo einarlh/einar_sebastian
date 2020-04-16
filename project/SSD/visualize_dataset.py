@@ -23,4 +23,4 @@ for idx in indices:
         image, boxes, labels, class_name_map=dataset.class_names
     )
     plt.imshow(image)
-    plt.show()
+    plt.savefig(str(idx) + ".jpg")
