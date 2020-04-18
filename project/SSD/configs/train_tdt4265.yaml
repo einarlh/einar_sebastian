@@ -1,22 +1,25 @@
 MODEL:
     NUM_CLASSES: 5
     BACKBONE:
-        NAME: 'vgg'
+        NAME: 'resnet_instructor_v2'
         PRETRAINED: True
-        #OUT_CHANNELS: [128, 256, 128, 128, 64, 64]
-        OUT_CHANNELS: [512, 1024, 512, 256, 256, 256]
+        # OUT_CHANNELS: [128, 256, 128, 128, 64, 64] #basic
+        # OUT_CHANNELS: [512, 1024, 512, 256, 256, 256] #vgg
+        OUT_CHANNELS: [128, 256, 512, 256, 256, 256] #resnet instructor v2
         INPUT_CHANNELS: 3
 INPUT:
-    IMAGE_SIZE: 300
+    IMAGE_SIZE: [320, 240]
+    # IMAGE_SIZE: [300, 300]
 DATASETS:
     TRAIN: ("tdt4265_train",)
     TEST: ("tdt4265_val", )
 SOLVER:
-    MAX_ITER: 120000
-    LR_STEPS: [80000, 100000]
+    MAX_ITER: 36000
+    LR_STEPS: [28000, 32000]
     GAMMA: 0.1
     BATCH_SIZE: 16
-    #LR: 1e-3
-    LR: 1e-4
-OUTPUT_DIR: 'outputs/VGG'
+    LR: 1.5e-3
+    WARMUP_ITERS: 1000
+    WARMUP_FACTOR: 0.2666
+OUTPUT_DIR: 'outputs/v4_17_tdt_4265_resnet_instructor_rectangular'
 DATASET_DIR: "datasets"

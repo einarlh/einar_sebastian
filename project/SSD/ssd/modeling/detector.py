@@ -45,25 +45,6 @@ def build_backbone(cfg):
                 "https://s3.amazonaws.com/amdegroot-models/vgg16_reducedfc.pth")
             model.init_from_pretrain(state_dict)
         return model
-    if backbone_name == "resnet152":
-        model = Resnet152(cfg)
-        if cfg.MODEL.BACKBONE.PRETRAINED:
-            model.init_from_pretrain()
-        return model
-    if backbone_name == "googlenet":
-        model = GoogleNet(cfg)
-        if cfg.MODEL.BACKBONE.PRETRAINED:
-            model.init_from_pretrain()
-        return model
-    if backbone_name == "mnasnet":
-        model = MNASNet(cfg)
-        if cfg.MODEL.BACKBONE.PRETRAINED:
-            model.init_from_pretrain()
-        return model
-    if backbone_name == "resnet_instructor":
-        model = ResnetInstructor(cfg)
-        if cfg.MODEL.BACKBONE.PRETRAINED:
-            model.init_from_pretrain()
     if backbone_name == "resnet_instructor_v2":
         model = ResnetInstructorV2(cfg)
         if cfg.MODEL.BACKBONE.PRETRAINED:

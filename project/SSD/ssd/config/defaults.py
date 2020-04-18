@@ -25,14 +25,8 @@ cfg.MODEL.BACKBONE.INPUT_CHANNELS = 3
 # PRIORS
 # -----------------------------------------------------------------------------
 cfg.MODEL.PRIORS = CN()
-# cfg.MODEL.PRIORS.FEATURE_MAPS = [[40, 30], [20, 15], [10, 8], [5,4], [3,2], [1,1]] #resnet
-# cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 16], [32, 30], [64, 60], [107, 120], [320, 240]] #resnnet
-# cfg.MODEL.PRIORS.FEATURE_MAPS = [[40, 30], [20, 15], [10, 8], [5,5], [3,3], [1,1]] #[320x240] googlenet
-# cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 16], [32, 30], [64, 48], [107, 80], [320, 240]]  #[320x240] googlenet
-# cfg.MODEL.PRIORS.FEATURE_MAPS = [[37, 37], [18, 18], [9, 9], [5, 5], [3, 3], [1, 1]] #[300x300] googlenet
-# cfg.MODEL.PRIORS.STRIDES = [[8,8], [16, 16], [32, 32], [64, 64], [100, 100], [300, 300]] #[300x300] googlenet
-# cfg.MODEL.PRIORS.FEATURE_MAPS = [[38, 38], [19, 19], [10, 10], [5, 5], [3, 3], [1, 1]] #[300x300] resnet instructor
-# cfg.MODEL.PRIORS.STRIDES = [[8,8], [16, 16], [30, 30], [60, 60], [100, 100], [300, 300]] #[300x300] resnet instructor
+# cfg.MODEL.PRIORS.FEATURE_MAPS = [[38, 38], [19, 19], [10, 10], [5, 5], [3, 3], [1, 1]] #[300x300] resnet instructor v2
+# cfg.MODEL.PRIORS.STRIDES = [[8,8], [16, 16], [30, 30], [60, 60], [100, 100], [300, 300]] #[300x300] resnet instructor v2
 cfg.MODEL.PRIORS.FEATURE_MAPS = [[40, 30], [20, 15], [10, 8], [5, 5], [3, 3], [1, 1]] #[320x240] resnet instructor
 cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 16], [32, 30], [64, 48], [107, 80], [320, 240]]  #[320x240] resnet instruc
 cfg.MODEL.PRIORS.MIN_SIZES = [30, 60, 111, 162, 213, 264]
