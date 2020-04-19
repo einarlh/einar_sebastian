@@ -11,7 +11,8 @@ MODEL:
         # OUT_CHANNELS: [480, 832, 1024, 256, 512, 1024] #googlenet
         INPUT_CHANNELS: 3
 INPUT:
-    IMAGE_SIZE: [480, 360]
+    # IMAGE_SIZE: [480, 360]
+    IMAGE_SIZE: [320, 240]
 DATASETS:
     TRAIN: ("tdt4265_train",)
     TEST: ("tdt4265_val", )
@@ -23,5 +24,5 @@ SOLVER:
     LR: 1e-3
     WARMUP_ITERS: 1000
     WARMUP_FACTOR: 0.2666
-OUTPUT_DIR: 'outputs/v6_1_resnet_instructor_img_480_360'
+OUTPUT_DIR: 'outputs/v6_3_resnet_instructor_random_contrast'
 DATASET_DIR: "datasets"

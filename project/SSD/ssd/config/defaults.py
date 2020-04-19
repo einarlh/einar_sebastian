@@ -29,8 +29,8 @@ cfg.MODEL.PRIORS = CN()
 # cfg.MODEL.PRIORS.STRIDES = [[8,8], [16, 16], [30, 30], [60, 60], [100, 100], [300, 300]] #[300x300] resnet instructor v2
 cfg.MODEL.PRIORS.FEATURE_MAPS = [[40, 30], [20, 15], [10, 8], [5, 5], [3, 3], [1, 1]] #[320x240] resnet instructor, resnet152, googlenet
 cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 16], [32, 30], [64, 48], [107, 80], [320, 240]]  #[320x240] resnet instructor, resnet152, googlenet
-cfg.MODEL.PRIORS.FEATURE_MAPS = [[60, 45], [30, 23], [15, 12], [7, 7], [4, 4], [1, 1]] #[480x320] resnet instructor, resnet152, googlenet
-cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 15.65], [32, 30], [68.57, 51.43], [120, 90], [480, 360]]  #[480x320] resnet instructor, resnet152, googlenet
+# cfg.MODEL.PRIORS.FEATURE_MAPS = [[60, 45], [30, 23], [15, 12], [7, 7], [4, 4], [1, 1]] #[480x320] resnet instructor, resnet152, googlenet
+# cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 15.65], [32, 30], [68.57, 51.43], [120, 90], [480, 360]]  #[480x320] resnet instructor, resnet152, googlenet
 
 cfg.MODEL.PRIORS.MIN_SIZES = [30, 60, 111, 162, 213, 264]
 cfg.MODEL.PRIORS.MAX_SIZES = [60, 111, 162, 213, 264, 315]
