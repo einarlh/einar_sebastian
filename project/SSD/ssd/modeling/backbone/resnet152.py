@@ -10,11 +10,11 @@ def add_extras(cfg, i, size=300):
     in_channels = i
     flag = False
     for k, v in enumerate(cfg):
-        if in_channels != 'S' and in_channels != 'K':
+        if in_channels != 'S' and in_channels != 'SQUARE':
             if v == 'S':
                 layers += [nn.Conv2d(in_channels, cfg[k + 1], kernel_size=(1, 3)[flag], stride=2, padding=1)]
-            elif v == 'K':
-                layers += [nn.Conv2d(in_channels, cfg[k + 1], kernel_size=(3,5), stride=1, padding=1)]
+            elif v == 'SQUARE':
+                layers += [nn.Conv2d(in_channels, cfg[k + 1], kernel_size=(2, 4), stride=2, padding=1)]
                 flag = not flag
             elif v == 'F':
                 layers += [nn.Conv2d(in_channels, cfg[k - 1], kernel_size=(2,2), stride=1, padding=0)]
@@ -29,7 +29,7 @@ def add_extras(cfg, i, size=300):
 
 extras_base = {
     '300': [256, 'S', 512, 128, 'S', 256, 128, 256, 128],
-    '[320, 240]': [256, 'S', 512, 128, 'S', 256, 128, 'K', 256],
+    '[320, 240]': [256, 'SQUARE', 512, 128, 'S', 256, 256],
 }
 
 class Resnet152(nn.Module):
@@ -82,7 +82,7 @@ class Resnet152(nn.Module):
         for k, v in enumerate(self.extras):
             x = F.relu(v(x), inplace=True)
             # print("Shape after: extra k:" + str(k) + " " + str(x.shape))
-            if k % 2 == 1:
+            if k in [1, 3, 4]:
                 # print("appending")
                 features.append(x)
         return features

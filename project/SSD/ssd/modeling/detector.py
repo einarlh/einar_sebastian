@@ -4,6 +4,7 @@ from ssd.modeling.backbone.basic import BasicModel
 from ssd.modeling.backbone.resnet152 import Resnet152
 from ssd.modeling.backbone.googlenet import GoogleNet
 from ssd.modeling.backbone.mnasnet import MNASNet
+from ssd.modeling.backbone.resnet_instructor_v2 import ResnetInstructorV2
 from ssd.modeling.box_head.box_head import SSDBoxHead
 from ssd.utils.model_zoo import load_state_dict_from_url
 from ssd import torch_utils
@@ -55,6 +56,11 @@ def build_backbone(cfg):
         return model
     if backbone_name == "mnasnet":
         model = MNASNet(cfg)
+        if cfg.MODEL.BACKBONE.PRETRAINED:
+            model.init_from_pretrain()
+        return model
+    if backbone_name == "resnet_instructor_v2":
+        model = ResnetInstructorV2(cfg)
         if cfg.MODEL.BACKBONE.PRETRAINED:
             model.init_from_pretrain()
         return model

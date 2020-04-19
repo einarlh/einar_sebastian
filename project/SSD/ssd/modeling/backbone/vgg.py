@@ -38,11 +38,14 @@ def add_extras(cfg, i, size=300):
     in_channels = i
     flag = False
     for k, v in enumerate(cfg):
-        if in_channels != 'S':
+        if in_channels != 'S' and in_channels != 'SQUARE':
             if v == 'S':
                 layers += [nn.Conv2d(in_channels, cfg[k + 1], kernel_size=(1, 3)[flag], stride=2, padding=1)]
+            elif v is 'SQUARE':
+                layers += [nn.Conv2d(in_channels, cfg[k + 1], kernel_size=(2, 4), stride=2, padding=1)]
             else:
                 layers += [nn.Conv2d(in_channels, v, kernel_size=(1, 3)[flag])]
+            
             flag = not flag
         in_channels = v
     if size == 512:
@@ -54,11 +57,14 @@ def add_extras(cfg, i, size=300):
 vgg_base = {
     '300': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'C', 512, 512, 512, 'M',
             512, 512, 512],
-    '[320, 240]': [256, 'S', 512, 128, 'S', 256, 128, 'K', 256],
+    '[320, 240]': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'C', 512, 512, 512, 'M',
+            512, 512, 512],
 
 }
 extras_base = {
     '300': [256, 'S', 512, 128, 'S', 256, 128, 256, 128, 256],
+    '[320, 240]': [256, 'SQUARE', 512, 'SQUARE', 512, 128, 'S', 256, 128, 'S', 256],
+
 }
 
 
@@ -100,7 +106,8 @@ class VGG(nn.Module):
                 nn.init.zeros_(m.bias)
 
     def init_from_pretrain(self, state_dict):
-        self.vgg.load_state_dict(state_dict)
+        pass
+        # self.vgg.load_state_dict(state_dict)
 
     def forward(self, x):
         features = []
@@ -108,15 +115,21 @@ class VGG(nn.Module):
             x = self.vgg[i](x)
         s = self.l2_norm(x)  # Conv4_3 L2 normalization
         features.append(s)
+        print("Appending, Shape after: layer1" + str(s.shape))
+
 
         # apply vgg up to fc7
         for i in range(33, len(self.vgg)):
             x = self.vgg[i](x)
         features.append(x)
+        print("Appending, Shape after: layer2" + str(x.shape))
+
 
         for k, v in enumerate(self.extras):
+            print("Shape after: extra k:" + str(k) + " " + str(x.shape))
             x = F.relu(v(x), inplace=True)
-            if k % 2 == 1:
+            if k in [2, 3, 5, 6]:
+                print("appending")
                 features.append(x)
 
         return tuple(features)

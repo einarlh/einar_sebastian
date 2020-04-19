@@ -25,10 +25,14 @@ cfg.MODEL.BACKBONE.INPUT_CHANNELS = 3
 # PRIORS
 # -----------------------------------------------------------------------------
 cfg.MODEL.PRIORS = CN()
+# cfg.MODEL.PRIORS.FEATURE_MAPS = [[38, 38], [19, 19], [10, 10], [5, 5], [3, 3], [1, 1]] #[300x300] resnet instructor v2
+# cfg.MODEL.PRIORS.STRIDES = [[8,8], [16, 16], [30, 30], [60, 60], [100, 100], [300, 300]] #[300x300] resnet instructor v2
+cfg.MODEL.PRIORS.FEATURE_MAPS = [[40, 30], [20, 15], [10, 8], [5, 5], [3, 3], [1, 1]] #[320x240] resnet instructor, resnet152, googlenet
+cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 16], [32, 30], [64, 48], [107, 80], [320, 240]]  #[320x240] resnet instructor, resnet152, googlenet
 # cfg.MODEL.PRIORS.FEATURE_MAPS = [[40, 30], [20, 15], [10, 8], [5,4], [3,2], [1,1]] #resnet
 # cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 16], [32, 30], [64, 60], [107, 120], [320, 240]] #resnnet
-cfg.MODEL.PRIORS.FEATURE_MAPS = [[40, 30], [20, 15], [10, 8], [5,5], [3,3], [1,1]] #googlenet
-cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 16], [32, 30], [64, 48], [107, 80], [320, 240]] #googlenet
+# cfg.MODEL.PRIORS.FEATURE_MAPS = [[40, 30], [20, 15], [10, 8], [5,5], [3,3], [1,1]] #googlenet
+# cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 16], [32, 30], [64, 48], [107, 80], [320, 240]] #googlenet
 cfg.MODEL.PRIORS.MIN_SIZES = [30, 60, 111, 162, 213, 264]
 cfg.MODEL.PRIORS.MAX_SIZES = [60, 111, 162, 213, 264, 315]
 cfg.MODEL.PRIORS.ASPECT_RATIOS = [[2], [2, 3], [2, 3], [2, 3], [2], [2]]
@@ -100,7 +104,7 @@ cfg.TEST.BATCH_SIZE = 10
 # Specific test options
 # ---------------------------------------------------------------------------- #
 cfg.EVAL_STEP = 500 # Evaluate dataset every eval_step, disabled when eval_step < 0
-cfg.MODEL_SAVE_STEP = 500 # Save checkpoint every save_step
+cfg.MODEL_SAVE_STEP = 5000 # Save checkpoint every save_step
 cfg.LOG_STEP = 10 # Print logs every log_stepPrint logs every log_step
 cfg.OUTPUT_DIR = "outputs"
 cfg.DATASET_DIR = "datasets"
