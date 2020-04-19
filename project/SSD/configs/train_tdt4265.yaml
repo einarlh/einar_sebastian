@@ -1,17 +1,17 @@
 MODEL:
     NUM_CLASSES: 5
     BACKBONE:
-        NAME: 'resnet152'
+        NAME: 'resnet_instructor_v2'
         PRETRAINED: True
         # OUT_CHANNELS: [128, 256, 128, 128, 64, 64] #basic
         # OUT_CHANNELS: [512, 1024, 512, 512, 256, 128] #vgg
-        OUT_CHANNELS: [512, 1024, 2048, 512, 256, 256] #resnet152
-        # OUT_CHANNELS: [128, 256, 512, 256, 256, 256] #resnet152_instructor_v2
+        # OUT_CHANNELS: [512, 1024, 2048, 512, 256, 256] #resnet152
+        OUT_CHANNELS: [128, 256, 512, 256, 256, 256] #resnet152_instructor_v2
         # OUT_CHANNELS: [40, 96, 320, 512, 256, 256] #mnasnet
         # OUT_CHANNELS: [480, 832, 1024, 256, 512, 1024] #googlenet
         INPUT_CHANNELS: 3
 INPUT:
-    IMAGE_SIZE: [320, 240]
+    IMAGE_SIZE: [480, 360]
 DATASETS:
     TRAIN: ("tdt4265_train",)
     TEST: ("tdt4265_val", )
@@ -23,5 +23,5 @@ SOLVER:
     LR: 1e-3
     WARMUP_ITERS: 1000
     WARMUP_FACTOR: 0.2666
-OUTPUT_DIR: 'outputs/v5_1_resnet152_benchmark'
+OUTPUT_DIR: 'outputs/v6_1_resnet_instructor_img_480_360'
 DATASET_DIR: "datasets"

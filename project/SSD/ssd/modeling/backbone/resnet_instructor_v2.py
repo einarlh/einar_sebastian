@@ -32,6 +32,7 @@ def conv3x3AndRelu(inplanes, outplanes, stride = 1, padding = 1):
 feat_map_base = {
     '[300, 300]': ['S2', 256, 'R3', 256, 'S2', 256], #convolution + resnet block
     '[320, 240]': ['SQUARE', 256, 'R3', 256, 'S2', 256], #convolution + resnet block
+    '[480, 360]': ['SQUARE', 256, 'R3', 256, 'S2', 256], #convolution + resnet block
     # '[320, 240]': [256, 'S', 128, 256, 'S', 256, 128, 'S', 256, 128],
 }
 
