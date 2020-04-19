@@ -96,7 +96,7 @@ class ResnetInstructorV2(nn.Module):
         for k, v in enumerate(self.feat_map):
             x = F.relu(v(x), inplace=False)
             # print("Shape after: extra k:" + str(k) + " " + str(x.shape))
-            if k in [0, 2, 3]:
+            if k in [0, 1, 2, 3]:
                 # print("appending")
                 features.append(x)
         return features
