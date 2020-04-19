@@ -13,14 +13,20 @@ def add_resnet_blocks(cfg, i):
         if not isinstance(in_channels, str):
             print(k)
             print(in_channels)
-            if v is 'SQUARE':
+            if v is 'SQUARE_K24':
                 print("Appending SQUARE Convolution")
                 layers += [nn.Conv2d(in_channels, cfg[k + 1], kernel_size=(2, 4), stride=2, padding=1)]
+            if v is 'SQUARE_K34':
+                print("Appending SQUARE Convolution")
+                layers += [nn.Conv2d(in_channels, cfg[k + 1], kernel_size=(3, 4), stride=1, padding=0)]
                 # flag = not flag
-            elif v == 'S2':
-                print("Appending S2 Convolution")
+            elif v == 'S2K3':
+                print("Appending S2K3 Convolution")
                 layers += [nn.Conv2d(in_channels, cfg[k + 1], kernel_size=(3, 3), stride=2, padding=0)]
-            elif v == 'R3':
+            elif v == 'S2K3':
+                print("Appending S2K2 Convolution")
+                layers += [nn.Conv2d(in_channels, cfg[k + 1], kernel_size=(2, 2), stride=1, padding=0)]
+            elif v == 'R_K3':
                 print("Appending R3 Resnet Block")
                 layers += [(BasicBlock(in_channels, cfg[k + 1], stride = 2, downsample = nn.Conv2d(in_channels, cfg[k + 1], kernel_size=(3, 3), stride=2, padding=1)))]
         in_channels = v
@@ -30,9 +36,10 @@ def conv3x3AndRelu(inplanes, outplanes, stride = 1, padding = 1):
     return nn.Conv2d(inplanes, outplanes, kernel_size = (3,3), stride = 1, padding = 1)
 
 feat_map_base = {
-    '[300, 300]': ['S2', 256, 'R3', 256, 'S2', 256], #convolution + resnet block
-    '[320, 240]': ['SQUARE', 256, 'R3', 256, 'S2', 256], #convolution + resnet block
-    '[480, 360]': ['SQUARE', 256, 'R3', 256, 'S2', 256], #convolution + resnet block
+    '[300, 300]': ['S2K3', 256, 'R_K3', 256, 'S2K3', 256], #convolution + resnet block
+    '[320, 240]': ['SQUARE_K24', 256, 'R_K3', 256, 'S2K3', 256], #convolution + resnet block
+    '[480, 360]': ['SQUARE_K24', 256, 'R_K3', 256, 'S2K3', 256], #convolution + resnet block
+    '[720, 540]': ['SQUARE_K24', 256, 'R_K3', 256, 'SQUARE_K34', 256, 'S2K3', 256], #convolution + resnet block
     # '[320, 240]': [256, 'S', 128, 256, 'S', 256, 128, 'S', 256, 128],
 }
 
@@ -89,7 +96,7 @@ class ResnetInstructorV2(nn.Module):
         for k, v in enumerate(self.feat_map):
             x = F.relu(v(x), inplace=False)
             # print("Shape after: extra k:" + str(k) + " " + str(x.shape))
-            if k in [0, 1, 2]:
+            if k in [0, 1, 2, 3]:
                 # print("appending")
                 features.append(x)
         return features

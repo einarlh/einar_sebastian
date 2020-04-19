@@ -43,7 +43,7 @@ class PriorBox:
 
                     # big sized square box
                     size = sqrt(self.min_sizes[k] * self.max_sizes[k])
-                    w = size / self.image_size[0]   
+                    w = size / self.image_size[0]     
                     h = size / self.image_size[1]
                     priors.append([cx, cy, w, h])
 

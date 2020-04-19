@@ -6,23 +6,25 @@ MODEL:
         # OUT_CHANNELS: [128, 256, 128, 128, 64, 64] #basic
         # OUT_CHANNELS: [512, 1024, 512, 512, 256, 128] #vgg
         # OUT_CHANNELS: [512, 1024, 2048, 512, 256, 256] #resnet152
-        OUT_CHANNELS: [128, 256, 512, 256, 256, 256] #resnet152_instructor_v2
+        # OUT_CHANNELS: [128, 256, 512, 256, 256, 256] #resnet152_instructor_v2
+        OUT_CHANNELS: [128, 256, 512, 256, 256, 256, 256] #resnet152_instructor_v2 [720x560]
         # OUT_CHANNELS: [40, 96, 320, 512, 256, 256] #mnasnet
         # OUT_CHANNELS: [480, 832, 1024, 256, 512, 1024] #googlenet
         INPUT_CHANNELS: 3
 INPUT:
+    # IMAGE_SIZE: [320, 240]
     # IMAGE_SIZE: [480, 360]
-    IMAGE_SIZE: [320, 240]
+    IMAGE_SIZE: [720, 540]
 DATASETS:
     TRAIN: ("tdt4265_train",)
     TEST: ("tdt4265_val", )
 SOLVER:
-    MAX_ITER: 22000
-    LR_STEPS: [18000, 20000]
+    MAX_ITER: 34000
+    LR_STEPS: [29000, 33000]
     GAMMA: 0.1
     BATCH_SIZE: 16
     LR: 1e-3
     WARMUP_ITERS: 1000
     WARMUP_FACTOR: 0.2666
-OUTPUT_DIR: 'outputs/v6_3_resnet_instructor_random_contrast'
+OUTPUT_DIR: 'outputs/v6_4_resnet_instructor_720x540'
 DATASET_DIR: "datasets"

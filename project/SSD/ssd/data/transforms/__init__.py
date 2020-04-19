@@ -10,7 +10,7 @@ def build_transforms(cfg, is_train=True):
             RandomSampleCrop(),
             RandomMirror(),
             # PhotometricDistort(),
-            RandomContrast(),
+            # RandomContrast(),
             ToPercentCoords(),
             Resize(cfg.INPUT.IMAGE_SIZE),
             Normalize(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD),
