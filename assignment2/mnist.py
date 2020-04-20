@@ -37,14 +37,12 @@ def extract_mnist():
         path = SAVE_PATH.joinpath(name[1])
         with gzip.open(path, 'rb') as f:
             data = np.frombuffer(f.read(), np.uint8, offset=16)
-            print(data.shape)
             mnist[name[0]] = data.reshape(-1, 28 * 28)
     # Load labels
     for name in filename[2:]:
         path = SAVE_PATH.joinpath(name[1])
         with gzip.open(path, 'rb') as f:
             data = np.frombuffer(f.read(), np.uint8, offset=8)
-            print(data.shape)
             mnist[name[0]] = data
     with open(save_path, 'wb') as f:
         pickle.dump(mnist, f)

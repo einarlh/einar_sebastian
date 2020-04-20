@@ -25,7 +25,10 @@ def compute_loss_and_accuracy(
     """
     average_loss = 0
     accuracy = 0
-
+    correct_predictions = 0
+    total_predictions = 0
+    counter = 0
+    total_loss = 0
     with torch.no_grad():
         for (X_batch, Y_batch) in dataloader:
             # Transfer images/labels to GPU VRAM, if possible
@@ -33,9 +36,16 @@ def compute_loss_and_accuracy(
             Y_batch = utils.to_cuda(Y_batch)
             # Forward pass the images through our model
             output_probs = model(X_batch)
-
+            max_index = output_probs.max(dim = 1)[1]
+            correct_predictions = correct_predictions + (max_index == Y_batch).sum()
+            total_predictions = total_predictions + X_batch.shape[0]
+            counter = counter + 1 
+            loss = nn.CrossEntropyLoss()
+            total_loss = total_loss + loss(output_probs, Y_batch)
             # Compute Loss and Accuracy
 
+    average_loss = total_loss / counter
+    accuracy = correct_predictions.double() / total_predictions
     return average_loss, accuracy
 
 
@@ -117,11 +127,14 @@ class Trainer:
         self.optimizer = torch.optim.SGD(self.model.parameters(),
                                          self.learning_rate)
 
+        # self.optimizer = torch.optim.adam(self.model.parameters(),
+        #                                  self.learning_rate)
+
         # Load our dataset
         self.dataloader_train, self.dataloader_val, self.dataloader_test = dataloaders
 
-        # Validate our model everytime we pass through 50% of the dataset
-        self.num_steps_per_val = len(self.dataloader_train) // 2
+        # Validate our model everytime we pass through 25% of the dataset
+        self.num_steps_per_val = len(self.dataloader_train) // 4
         self.global_step = 0
         self.start_time = time.time()
 
@@ -133,6 +146,37 @@ class Trainer:
         self.TEST_ACC = collections.OrderedDict()
 
         self.checkpoint_dir = pathlib.Path("checkpoints")
+
+    def print_val_test_train_stats(self):
+        self.model.eval()
+
+        validation_loss, validation_acc = compute_loss_and_accuracy(
+            self.dataloader_val, self.model, self.loss_criterion
+        )
+        print(
+            f"Validation Loss: {validation_loss:.2f},",
+            f"Validation Accuracy: {validation_acc:.3f}",
+            sep="\t")
+
+
+        test_loss, test_acc = compute_loss_and_accuracy(
+            self.dataloader_test, self.model, self.loss_criterion
+        )
+        print(
+            f"Test Loss: {test_loss:.2f},",
+            f"Test Accuracy: {test_acc:.3f}",
+            sep="\t")
+
+        train_loss, train_acc = compute_loss_and_accuracy(
+            self.dataloader_train, self.model, self.loss_criterion
+        )
+        print(
+            f"Train Loss: {train_loss:.2f},",
+            f"Train Accuracy: {train_acc:.3f}",
+            sep="\t")
+
+        self.model.train()
+
 
     def validation_epoch(self):
         """
@@ -261,10 +305,10 @@ def create_plots(trainer: Trainer, name: str):
 
 
 if __name__ == "__main__":
-    epochs = 10
+    epochs = 5
     batch_size = 64
-    learning_rate = 5e-2
-    early_stop_count = 4
+    learning_rate = 5e-3
+    early_stop_count = 2
     dataloaders = load_cifar10(batch_size)
     model = ExampleModel(image_channels=3, num_classes=10)
     trainer = Trainer(
@@ -275,5 +319,4 @@ if __name__ == "__main__":
         model,
         dataloaders
     )
-    trainer.train()
-    create_plots(trainer, "task2")
+
