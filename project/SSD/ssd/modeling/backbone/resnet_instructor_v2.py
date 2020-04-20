@@ -40,6 +40,7 @@ feat_map_base = {
     '[320, 240]': ['SQUARE_K24', 256, 'R_K3', 256, 'S2K3', 256], #convolution + resnet block
     '[480, 360]': ['SQUARE_K24', 256, 'R_K3', 256, 'S2K3', 256], #convolution + resnet block
     '[720, 540]': ['SQUARE_K24', 256, 'R_K3', 256, 'SQUARE_K34', 256, 'S2K3', 256], #convolution + resnet block
+    '[1080, 810]': ['SQUARE_K24', 256, 'R_K3', 256, 'SQUARE_K34', 256, 'SQUARE_K34', 256, 'S2K3', 256], #convolution + resnet block
     # '[320, 240]': [256, 'S', 128, 256, 'S', 256, 128, 'S', 256, 128],
 }
 
@@ -96,7 +97,7 @@ class ResnetInstructorV2(nn.Module):
         for k, v in enumerate(self.feat_map):
             x = F.relu(v(x), inplace=False)
             # print("Shape after: extra k:" + str(k) + " " + str(x.shape))
-            if k in [0, 1, 2, 3]:
+            if k in [0, 1, 2, 3, 4]:
                 # print("appending")
                 features.append(x)
         return features
