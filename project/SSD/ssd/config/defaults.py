@@ -34,10 +34,13 @@ cfg.MODEL.PRIORS = CN()
 cfg.MODEL.PRIORS.FEATURE_MAPS = [[90, 68],  [45, 34],       [23, 17],       [11, 9],        [6, 5],     [3, 3],         [1, 1]] #[720x560] resnet instructor, resnet152, googlenet
 cfg.MODEL.PRIORS.STRIDES = [[8, 8.23],      [16, 16.47],    [31.3, 32.94],  [65.45, 62.22], [120, 112], [240, 186.66],  [720,560]] #[720x560] resnet instructor, resnet152, googlenet
 
-cfg.MODEL.PRIORS.MIN_SIZES = [30, 60, 111, 162, 213, 264, 315] # [300x300], [320x240], [480x320]
-cfg.MODEL.PRIORS.MAX_SIZES = [60, 111, 162, 213, 264, 315, 500] # [300x300], [320x240], [480x320]
-# cfg.MODEL.PRIORS.MIN_SIZES = [67, 135, 250, 162, 365, 594] #[720x560] resnet instructor
-# cfg.MODEL.PRIORS.MAX_SIZES = [135, 250, 162, 365, 594, 709] #[720x560] resnet instructor
+# cfg.MODEL.PRIORS.MIN_SIZES = [30, 60, 111, 162, 213, 264] # [300x300], [320x240], [480x320]
+# cfg.MODEL.PRIORS.MAX_SIZES = [60, 111, 162, 213, 264, 315] # [300x300], [320x240], [480x320]
+# cfg.MODEL.PRIORS.MIN_SIZES = [30, 60, 111, 162, 213, 264, 315] # [720x560] resnet instructor small boxes
+# cfg.MODEL.PRIORS.MAX_SIZES = [60, 111, 162, 213, 264, 315, 500] # [720x560] resnet instructor small boxes
+
+cfg.MODEL.PRIORS.MIN_SIZES = [30, 67, 135, 250, 162, 365, 594] #[720x560] resnet instructor
+cfg.MODEL.PRIORS.MAX_SIZES = [67, 135, 250, 162, 365, 594, 709] #[720x560] resnet instructor
 # cfg.MODEL.PRIORS.ASPECT_RATIOS = [[2], [2, 3], [2, 3], [2, 3], [2], [2]] #[300x300], [320x240], [480x320]
 cfg.MODEL.PRIORS.ASPECT_RATIOS = [[2], [2, 3], [2, 3], [2, 3], [2, 3], [2], [2]] #[720x560]
 # When has 1 aspect ratio, every location has 4 boxes, 2 ratio 6 boxes.
