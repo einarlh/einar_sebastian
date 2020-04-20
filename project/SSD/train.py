@@ -8,6 +8,7 @@ from ssd.config.defaults import cfg
 from ssd.data.build import make_data_loader
 from ssd.engine.trainer import do_train
 from ssd.modeling.detector import SSDDetector
+from ssd.modeling.detector import DSSDDetector
 from ssd.solver.build import make_optimizer, make_lr_scheduler
 from ssd.utils.checkpoint import CheckPointer
 from ssd.utils.logger import setup_logger
@@ -16,7 +17,14 @@ from ssd import torch_utils
 
 def start_train(cfg):
     logger = logging.getLogger('SSD.trainer')
-    model = SSDDetector(cfg)
+    detector_name = cfg.MODEL.META_ARCHITECTURE
+
+    """if detector_name == DSSDDetector: 
+        model = DSSDDetector(cfg)
+    else:
+        model = SSDDetector(cfg)
+    """
+    model = DSSDDetector(cfg)
     model = torch_utils.to_cuda(model)
 
     lr = cfg.SOLVER.LR 

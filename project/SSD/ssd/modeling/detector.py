@@ -9,6 +9,36 @@ from ssd.modeling.box_head.box_head import SSDBoxHead
 from ssd.utils.model_zoo import load_state_dict_from_url
 from ssd import torch_utils
 
+
+
+#from torch import nn
+
+#from ssd.modeling.backbone import build_backbone
+from ssd.modeling.decoder import build_decoder
+#from ssd.modeling.box_head import build_box_head
+
+
+class DSSDDetector(nn.Module):
+    def __init__(self, cfg):
+        super().__init__()
+        self.cfg = cfg
+        self.backbone = build_backbone(cfg)
+        self.decoder = build_decoder(cfg)
+        self.box_head = SSDBoxHead(cfg)
+
+
+    def forward(self, images, targets=None):
+        print("try forward##############################")
+        features = self.backbone(images)
+        print("backbone done ###############")
+        features = self.decoder(features)
+        print("decoder done#####################")
+        detections, detector_losses = self.box_head(features, targets)
+        if self.training:
+            return detector_losses
+        return detections
+
+
 class SSDDetector(nn.Module):
     def __init__(self, cfg):
         super().__init__()

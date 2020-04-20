@@ -108,3 +108,15 @@ cfg.MODEL_SAVE_STEP = 5000 # Save checkpoint every save_step
 cfg.LOG_STEP = 10 # Print logs every log_stepPrint logs every log_step
 cfg.OUTPUT_DIR = "outputs"
 cfg.DATASET_DIR = "datasets"
+
+
+# ---------------------------------------------------------------------------- #
+# Decoder
+# ---------------------------------------------------------------------------- #
+cfg.MODEL.DECODER = CN()
+cfg.MODEL.DECODER.WITH_DECODER = True
+cfg.MODEL.DECODER.NAME = 'DSSDDecoder'
+cfg.MODEL.DECODER.OUT_CHANNELS = [1024, 512, 512, 512, 512, 512] # 1, 3, 5, 10, 20, 40
+
+cfg.MODEL.DECODER.DECONV_KERNEL_SIZE = [3, 1, 2, 2, 2]
+cfg.MODEL.DECODER.ELMW_TYPE = "prod"  # ["sum", "prod"]
