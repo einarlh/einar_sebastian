@@ -84,7 +84,7 @@ def do_train(cfg, model,
         if iteration % cfg.MODEL_SAVE_STEP == 0:
             checkpointer.save("model_{:06d}".format(iteration), **arguments)
 
-        if cfg.EVAL_STEP > 0 and iteration % cfg.EVAL_STEP == 0:
+        if cfg.EVAL_STEP > 0 and iteration % cfg.EVAL_STEP == 0 and iteration > cfg.FIRST_EVAL:
             eval_results = do_evaluation(cfg, model, iteration=iteration)
             for eval_result, dataset in zip(eval_results, cfg.DATASETS.TEST):
                 write_metric(

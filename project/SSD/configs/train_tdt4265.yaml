@@ -30,8 +30,8 @@ DATASETS:
     TRAIN: ("tdt4265_train",)
     TEST: ("tdt4265_val", )
 SOLVER:
-    MAX_ITER: 40000
-    LR_STEPS: [34000, 39000]
+    MAX_ITER: 30000
+    LR_STEPS: [24000, 29000]
     GAMMA: 0.1
     BATCH_SIZE: 16
     LR: 1e-3

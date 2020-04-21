@@ -114,8 +114,9 @@ cfg.TEST.BATCH_SIZE = 10
 # ---------------------------------------------------------------------------- #
 # Specific test options
 # ---------------------------------------------------------------------------- #
-cfg.EVAL_STEP = 4000 # Evaluate dataset every eval_step, disabled when eval_step < 0
-cfg.MODEL_SAVE_STEP = 15000 # Save checkpoint every save_step
+cfg.EVAL_STEP = 5000 # Evaluate dataset every eval_step, disabled when eval_step < 0
+cfg.FIRST_EVAL = 9000 # Evaluate dataset starting from this point
+cfg.MODEL_SAVE_STEP = 16000 # Save checkpoint every save_step
 cfg.LOG_STEP = 10 # Print logs every log_stepPrint logs every log_step
 cfg.OUTPUT_DIR = "outputs"
 cfg.DATASET_DIR = "datasets"
