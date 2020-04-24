@@ -30,12 +30,12 @@ DATASETS:
     TRAIN: ("tdt4265_train",)
     TEST: ("tdt4265_val", )
 SOLVER:
-    MAX_ITER: 30000
-    LR_STEPS: [24000, 29000]
+    MAX_ITER: 20000
+    LR_STEPS: [19000, 21000]
     GAMMA: 0.1
     BATCH_SIZE: 16
     LR: 1e-3
     WARMUP_ITERS: 1000
     WARMUP_FACTOR: 0.2666
-OUTPUT_DIR: 'outputs/v6_7_resnet_instructor_1080x810'
+OUTPUT_DIR: 'outputs/v9_2_resnet34_1080x810_20k_iter'
 DATASET_DIR: "datasets"
